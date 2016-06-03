@@ -1,0 +1,89 @@
+title: <<深入Java虚拟机>>之垃圾收集器
+date: 2014-06-10 15:13:36
+categories: JVM
+toc: true
+---
+## 引文 ##
+垃圾收集器是对各种针对内存回收算法的具体实现。由于Java虚拟机规范中对垃圾收集器的实现没有任何规定，因此不同的厂商、不同版本的虚拟机所提供的垃圾收集器可能存在很大的差别。在阅读本文之前，希望你对jvm的基本内存结构以及基本垃圾收集算法有一些基本的了解。你可以参考本人的其他两篇博客[<<深入Java虚拟机>>笔记之Java内存区域](http://blog.jassassin.com/2014/06/02/jvm/jvm-memory/)、[<<深入Java虚拟机>>笔记之垃圾收集算法](http://blog.jassassin.com/2014/06/05/jvm/jvm-gc-alg/)。当然，你也可以参考其他的网络文章。
+
+![gc3.jpg](/imgs/jvm/gc3.jpg)
+
+
+上图中所列的是下文要逐个说明的具体垃圾收集器。其中两者之间存在连线的收集器可以搭配使用。
+
+## Stop The World ##
+在继续说明垃圾收集器之前，先来说明下什么是"Stop The World"。在可达性分析中从GC Roots节点找引用链操作时会造成GC停顿，因为这项分析工作必须在一个能确保一致性的快照中进行，这里的"一致性"是指在整个分析期间整个执行系统看起来就像被冻结在某个时间点上，不可以出现分析过程中对象引用关系还在不断变化的情况。这点是导致GC进行时必须停顿所有Java执行线程(Sun将这件事情称为"Stop The World")的其中一个重要原因。基本上每种垃圾收集器都在着眼于减少这部分的时间。
+
+## 安全点 ##
+在Hotspot虚拟机实现中，使用*OopMap*的数据结构在类加载完成时，HotSpot就把对象内什么偏移量是什么类型的数据计算出来，在JIT编译过程中，在待定的位置记录下栈和寄存器中哪些位置是引用。这样，GC在扫描时就可以直接得知哪些地方存着对象的引用。而实际上，HotSpot没有为每条指令都生成OopMap，其知识在"特定的位置"记录了这些信息，这些位置称为安全点(Safepoint)，即*程序执行时并非在所有地方都能停顿下来GC，只有在到达安全点时才能暂停*。
+
+## 新生代收集器 ##
+### Serial收集器 ###
+Serial收集器是JDK 1.3.1之前的虚拟机新生代收集的唯一选择。这个收集器是一个单线程的收集器，而且它在进行垃圾收集时*必须暂停其他所有的工作线程(Stop The World)*，直到它收集结束。"Stop The World"，由虚拟机在后台自动发起和自动完成。下图是Serial/Serial Old收集器的运行过程:
+![serial.jpg](/imgs/jvm/serial.jpg)
+注:Serial收集器是虚拟机运行在Client模式下的默认新生代收集器。简单而高效，特别是对于单个CPU环境。
+
+### ParNew收集器 ###
+ParNew收集器是Serial收集器的多线程版本，除使用多线程进行垃圾收集之外，其余行为包括Serial收集器可用的所有控制参数、收集算法、Stop The World、对象分配规则、回收策略都与Serial收集器完全一样。
+![parnew](/imgs/jvm/parnew.png)
+注:
+- 目前来说，新生代只有Serial和ParNew收集器可以与老年代的CMS收集器配合工作
+- 在单CPU环境下ParNew并不比Serial收集器有更好的效果，甚至可能不如后者(频繁的线程切换)
+- ParNew收集器默认开启的线程数与CPU的数量相同，可以使用-XX:ParallelGCThreads参数来限制垃圾收集的线程数
+
+### Parallel Scavenge收集器 ###
+Parallel Scavenge收集器是一个新生代收集器，它也是使用复制算法的收集器，又是并行的多线程收集器，看上去和ParNew一样。
+- Parallel Scavenge收集器的目标是达到一个可控制的吞吐量(吞吐量=运行用户代码时间/(运行用户代码时间+垃圾收集时间))。所谓吞吐量指的是CPU用于运行用户代码的时间与CPU总消耗时间的比值。
+- Parallel Scavenge收集器提供了两个参数用于精确控制吞吐量，分别是控制最大垃圾收集停顿时间的-XX:MaxGCPauseMillis参数以及直接设置吞吐量大小的-XX:GCTimeRatio参数
+- Parallel Scavenge收集器提供了开关参数-XX:UseAdaptiveSizePolicy，当打开这个参数时，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量，这种调节方式称为GC自适应的调节策略。
+- 自适应调节策略是Parallel Scavenge收集器与ParNew收集器的一个重要区别。
+
+## 老年代收集器 ##
+### Serial Old收集器 ###
+Serial Old收集器是Serial收集器的老年代版本，它同样是一个单线程收集器，使用"标记-整理"算法。
+Client模式
+- 用于给Client模式下的虚拟机使用
+
+Server模式
+
+- 在JDK1.5以及之前的版本中与Parallel Scavenge收集器搭配使用
+- 作为CMS收集器的后背预案
+
+### Parallel Old收集器 ###
+Parallel Old是Parallel Scavenge收集器的老年代版本，使用多线程和“标记-整理”算法。这个收集器在JDK1.6中才出现。而且，在JDK1.5以及之前版本如果新生代使用Parallel Scavenge收集器，则老年代只能使用Serial Old收集器。
+注:
+- Parallel Old可以和Parallel Scavenge收集器配合使用。特别是在吞吐量以及CPU敏感的场合。
+
+Parallel Old收集器工作过程如下图:
+![parallel-old](/imgs/jvm/parallel-old.png)
+
+### CMS收集器 ###
+CMS(Concurrent Mark Sweep)收集器是一种以获取最短回收停顿时间为目标的收集器。
+CMS收集器是基于"标记-清除"算法实现的，整个过程分为以下4个步骤:
+
+- 初始标记(CMS initial mark)，需要"Stop The World",仅仅标记GC Roots能直接关联到得对象
+- 并发标记(CMS concurrent mark)，进行GC Roots Tracing的过程
+- 重新标记(CMS remark)，修正并发标记期间因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录
+- 并发清除(CMS concurrent sweep)
+其过程如下图所示:
+
+![cms](/imgs/jvm/cms.jpg)
+
+由于整个过程中耗时最长的并发标记和并发清除过程收集器都可以与用户线程一起工作。因此，从总体上看，CMS收集器的内存回收过程是与用户线程一起并发执行的。
+
+CMS的缺点:
+1. CMS收集器对CPU资源非常敏感。在CMS进行并发标记和并发清除时虽然不会导致用户线程停顿，但是会因为占用了一部分CPU资源从而导致应用程序变慢，总吞吐量会降低。CMS默认启动的回收线程数是(CPU数量+3)/4，也就是当CPU在4个以上时，并发回收垃圾收集线程不少于25%的CPU资源，并且随着CPU数量的增加而下降。但当CPU资源不足4个时，CMS对用户程序的影响就可能变得很大。
+
+2. CMS收集器无法处理浮动垃圾，可能出现"Concurrent Mode Failure"失败而导致另一次Full GC的产生。由于CMS并发清理阶段用户线程还在运行着，伴随程序运行自然就还会有新的垃圾产生，这部分垃圾出现在标记过程之后，CMS无法在当次收集中处理它们，只好留待下一次GC时再清理掉。这部分垃圾就称为"浮动垃圾"。由于在垃圾收集阶段用户线程还需要运行，那也就还需要预留足够的内存空间给用户线程使用，因此CMS收集器不能像其他收集器那样等到老年代几乎完全被填满了再进行收集，需要预留一部分空间提供并发收集时的程序运作使用。在JDK1.5中，CMS收集器当老年代使用了68%的空间后就会被激活。如果在应用中老年代增长不是太快，可以适当调高参数-XX:CMSInitiatingOccupancyFraction的值来提高触发百分比，以降低内存回收次数从而获取更好的性能，在JDK1.6中，CMS收集器的启动阈值已经提升到92%。要是CMS运行期间预留的内存无法满足程序需要，就会出现一次"Concurrent Mode Failure"失败，这时虚拟机将启动后备预案:临时启动Serial Old收集器来重新进行老年代的垃圾收集，这样停顿时间就很长了。因此参数-XX:CMSInitiatingOccupancyFraction设置的太高很容易导致大量"Conurrent Mode Failure"失败，性能反而降低。
+
+3. 内存碎片。由于CMS基于"标记-清除"算法实现的，因此会产生大量的空间碎片。空间碎片过多时，将会给大对象分配带来很大麻烦，往往会出现老年代还有很大空间剩余，但是无法找到足够大的连续空间来分配当前对象，不得不提前触发一次Full GC。为了解决这个问题，CMS收集器提供了一个-XX:UseCMSCompactAtFullCollection开关参数(默认开启)，用于在CMS收集器顶不住要进行Full GC时开启内存碎片的合并整理过程，内存整体的过程是无法并发的，因此停顿时间将变长。虚拟机还设计了参数-XX:CMSFullGCsBeforeCompaction，用于设置执行多少次不压缩的Full GC后，跟着进行一次带压缩的Full GC。
+
+## G1收集器 ##
+
+## 后记 ###
+
+每种收集器都有自己的优缺点，可以根据具体的生产环境组合权衡使用。
+
+---
+
+参考 [深入Java虚拟机](http://item.jd.com/11252778.html)/chapter03 垃圾收集器与内存分配策略
