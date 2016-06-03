@@ -68,5 +68,5 @@ theme: wixo
 ## Docs: http://hexo.io/docs/deployment.html
 deploy: 
   type: git 
-  repository: https://github.com/jassassin/wiki.git
-  branch: gh-pages
+  repository: https://github.com/HepcatMan/HepcatMan.github.io.git
+  branch: master
