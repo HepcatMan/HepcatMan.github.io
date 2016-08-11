@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>daily-use program | Wiki</title>
+  <meta name="author" content="Jassassin">
+  
+  <meta name="description" content="使用wget命令模拟post请求Linux中的wget是一个非常强大的命令，常用来下载文件。参考:wget 命令用法详解.也可以用来模拟post请求:12345678910111213141516171. 简单页面的抓取  wget http://domain.com/path/simple_pag">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="daily-use program"/>
+  <meta property="og:site_name" content="Wiki"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">Wiki</a><span class="split"></span><span class="title">daily-use program</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2015-08-05</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <h2 id="使用wget命令模拟post请求"><a href="#使用wget命令模拟post请求" class="headerlink" title="使用wget命令模拟post请求"></a>使用wget命令模拟post请求</h2><p>Linux中的<code>wget</code>是一个非常强大的命令，常用来下载文件。参考:<a href="http://www.cnblogs.com/analyzer/archive/2010/05/04/1727438.html" target="_blank" rel="external">wget 命令用法详解</a>.也可以用来模拟post请求:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">1. 简单页面的抓取  </div><div class="line">wget http://domain.com/path/simple_page.html  </div><div class="line">2. 添加自己的head  </div><div class="line">wget --header=<span class="string">"MyHeader: head_value"</span> http://domain.com/path/page/need_header.php  </div><div class="line">3. 伪装成浏览器  </div><div class="line">有些网站，例如facebook，会检测请求方式是否是浏览器，如果不是正常的浏览器，那么会redirect到一个<span class="string">"incompatible browser"</span>的错误页面。</div><div class="line">这时候需要wget伪装成一个浏览器（我是Mozilla Firefox！）：  </div><div class="line">wget --user-agent=<span class="string">"Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 (.NET CLR 3.5.30729)"</span></div><div class="line">	http://domain.com/path/page/check_user_agent.php  </div><div class="line">4. post数据到某个页面  </div><div class="line">wget不光可以用get方式请求网页，还可以post data的，那样就可以实现自动注册、自动登录了（有验证码的页面除外。。。。）  </div><div class="line">wget --post-data=<span class="string">"user=user1&amp;pass=pass1&amp;submit=Login"</span> http://domain.com/login.php  </div><div class="line">5. 访问需要登录的页面  </div><div class="line">有些页面的访问需要登录，访问的时候需要传递cookie，这时候就需要和上面提到的post方式结合。一般过程是：post用户名和密码登录、保存cookie，</div><div class="line">然后访问页面时附带上cookie。  </div><div class="line">wget --post-data=<span class="string">"user=user1&amp;pass=pass1&amp;submit=Login"</span> --save-cookies=cookie.txt --keep-session-cookies http://domain.com/login.php  </div><div class="line">wget --load-cookies=cookie.txt http://domain.com/path/page_need_login.php</div></pre></td></tr></table></figure></p>
+<h2 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h2><p>在搭建hadoop或者storm等集群时，最好单独创建用户来操作:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">1.添加帐号</div><div class="line">useradd -m <span class="_">-s</span> /bin/bash -g groupname username</div><div class="line">-c comment 指定一段注释性描述。</div><div class="line"><span class="_">-d</span> 目录 指定用户主目录，如果此目录不存在，则同时使用-m选项，可以创建主目录。</div><div class="line">-g 用户组 指定用户所属的用户组。</div><div class="line">-G 用户组，用户组 指定用户所属的附加组。</div><div class="line"><span class="_">-s</span> Shell文件 指定用户的登录Shell。(/bin/bash 使用bash（ 默认为 /bin/sh 使用默认不会在 $ 符前面出现loginname@ubuntu）)</div><div class="line">-u 用户号 指定用户的用户号，如果同时有-o选项，则可以重复使用其他用户的标识号。</div><div class="line">-m 创建home目录 （不加这个要手动添加目录，不然会出现No directory,Logging <span class="keyword">in</span> with HOME=/ ）</div><div class="line"></div><div class="line">接着修改新用户密码: passwd username</div><div class="line"></div><div class="line">2.删除帐号</div><div class="line">userdel -r username</div><div class="line">-r，它的作用是把用户的主目录一起删除。</div><div class="line"></div><div class="line">3.添加用户组</div><div class="line">groupadd groupname</div><div class="line">-g GID 指定新用户组的组标识号（GID）。</div><div class="line">-o 一般与-g选项同时使用，表示新用户组的GID可以与系统已有用户组的GID相同。</div><div class="line"></div><div class="line">4.使username用户可以执行sudo命令</div><div class="line">有时新用户执行sudo命令时会出现如下提示:</div><div class="line"><span class="string">"Sorry, user username is not allowed to execute '/usr/bin/vim /etc/sudoers' as root on jassassin."</span></div><div class="line"></div><div class="line">解决方式:</div><div class="line">su -  //切换至root用户</div><div class="line">vim /etc/sudoers //添加</div><div class="line">	root    ALL=(ALL:ALL) ALL</div><div class="line"></div><div class="line">	username   ALL=(ALL:ALL) ALL</div><div class="line"></div><div class="line">wq!  //保存</div><div class="line"></div><div class="line">5.对于jdk等环境变量，在~/.profile中修改</div></pre></td></tr></table></figure></p>
+<h2 id="添加自起服务"><a href="#添加自起服务" class="headerlink" title="添加自起服务"></a>添加自起服务</h2><p>工作中实际项目经常是被部署到Linux服务器上进行运行的。在此情况下编写一个项目启动停止脚本会使项目管理起来更为方面。如果再进一步将其做成linux系统服务，那就更加方便了。因为这样就不用再去项目目录下去执行管理脚本。同时也可以将此服务做成开机启动项！</p>
+<ol>
+<li><p>编写管理脚本,如myserviced</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh  </span></div><div class="line"><span class="comment">#chkconfig: 2345 80 05   </span></div><div class="line"><span class="comment">#description: myservice   </span></div><div class="line"></div><div class="line"><span class="comment"># 接收输入参数start/stop/restart</span></div><div class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span>  </div><div class="line">start)  </div><div class="line">    <span class="built_in">echo</span> <span class="string">"myservice startup"</span> <span class="comment">#将该行替换成你自己的服务启动命令  </span></div><div class="line">    ;;  </div><div class="line">stop)  </div><div class="line">    <span class="built_in">echo</span> <span class="string">"myservice stop"</span> <span class="comment">#将该行替换成你自己服务的启动命令  </span></div><div class="line">    ;;  </div><div class="line">restart)  </div><div class="line">    <span class="built_in">echo</span> <span class="string">"myservice stop"</span> <span class="comment">#...  </span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"myservice startup"</span> <span class="comment">#...  </span></div><div class="line">    ;;  </div><div class="line">*)  </div><div class="line">    ;;  </div><div class="line"><span class="keyword">esac</span>  </div><div class="line"></div><div class="line"><span class="comment"># chkconfig 2345表示服务的运行级别，80代表Start的顺序，05代表Kill（Stop）的顺序；</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>将编写的脚本放到/etc/init.d/，将myserviced的访问权限加上“可执行”权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ chmod +x /etc/init.d/myserviced</div></pre></td></tr></table></figure>
+</li>
+<li><p>添加服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ chkconfig --add myserviced  </div><div class="line"><span class="comment"># 查看是否添加成功</span></div><div class="line">$ chkconfig --list | grep myserviced</div></pre></td></tr></table></figure>
+</li>
+<li><p>如果需要开机启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 单独开启myserviced服务的命令</span></div><div class="line">$ chkconfig myserviced on</div><div class="line"><span class="comment"># 单独关闭myserviced服务的命令</span></div><div class="line">$ chkconfig myserviced off</div><div class="line"><span class="comment"># 查看服务状态</span></div><div class="line">$ /etc/init.d/myserviced status</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>以上步骤完成之后，重启!</p>
+<h2 id="查看端口被哪个进程占用"><a href="#查看端口被哪个进程占用" class="headerlink" title="查看端口被哪个进程占用"></a>查看端口被哪个进程占用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ netstat -ntlp|grep 4000 <span class="comment">#查询的端口</span></div><div class="line"><span class="comment"># 输出</span></div><div class="line">tcp        0      0 0.0.0.0:4000            0.0.0.0:*               LISTEN      6689/hexo  <span class="comment"># 6689即占用4000端口的进程号</span></div><div class="line">$ ps -ef|grep 6689 <span class="comment"># 查看该进程的信息</span></div><div class="line"><span class="comment"># 输出 14:00该进程启动时间</span></div><div class="line">eagle     6689  6675  0 14:00 pts/7    00:00:06 hexo <span class="comment"># 这个就是进程信息了</span></div></pre></td></tr></table></figure>
+<p>将以上的过程进行合并<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ netstat -ntlp|grep 4000|awk <span class="string">'&#123;print $7&#125;'</span></div></pre></td></tr></table></figure></p>
+<h2 id="find-指定文件"><a href="#find-指定文件" class="headerlink" title="find 指定文件"></a>find 指定文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># . 当前目录   -maxdepth 默认只查询当前目录,不查询子目录,通过该参数可以设置查询的子目录最大深度  </span></div><div class="line">find . -maxdepth 10 -name <span class="string">"124-*"</span></div></pre></td></tr></table></figure>
+<h2 id="find-文件内容"><a href="#find-文件内容" class="headerlink" title="find 文件内容"></a>find 文件内容</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># . 当前目录   -maxdepth 默认只查询当前目录,不查询子目录,通过该参数可以设置查询的子目录最大深度  dsymbolized 查询关键字</span></div><div class="line">find . -maxdepth 10 -type f -name <span class="string">"*.log"</span> | xargs grep <span class="string">"dsymbolized"</span></div></pre></td></tr></table></figure>
+<h2 id="查询文件或文件夹的磁盘使用空间"><a href="#查询文件或文件夹的磁盘使用空间" class="headerlink" title="查询文件或文件夹的磁盘使用空间"></a>查询文件或文件夹的磁盘使用空间</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">[root@centos6 /]<span class="comment"># du -h --max-depth=10 /opt/*</span></div><div class="line">76K	/opt/kafka_2.10-0.8.2.0/bin/windows</div><div class="line">156K	/opt/kafka_2.10-0.8.2.0/bin</div><div class="line">18M	/opt/kafka_2.10-0.8.2.0/libs</div><div class="line">44K	/opt/kafka_2.10-0.8.2.0/config</div><div class="line">8.8G	/opt/kafka_2.10-0.8.2.0/logs</div><div class="line">8.9G	/opt/kafka_2.10-0.8.2.0</div><div class="line">16M	/opt/kafka_2.10-0.8.2.0.tgz</div><div class="line">4.0K	/opt/rh</div><div class="line">8.0K	/opt/server-cluster.properties</div><div class="line">4.0K	/opt/zk/data</div><div class="line">8.0K	/opt/zk</div><div class="line">16K	/opt/zookeeper/data/version-2</div><div class="line">28K	/opt/zookeeper/data</div><div class="line">28K	/opt/zookeeper/logs/version-2</div><div class="line">32K	/opt/zookeeper/logs</div><div class="line">64K	/opt/zookeeper</div></pre></td></tr></table></figure>
+<h2 id="统计当前目录大小并按大小排序"><a href="#统计当前目录大小并按大小排序" class="headerlink" title="统计当前目录大小并按大小排序"></a>统计当前目录大小并按大小排序</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">[root@centos6 /]<span class="comment"># du -sm * | sort -n</span></div><div class="line">0	selinux</div><div class="line">0	sys</div><div class="line">1	dev</div><div class="line">1	home</div><div class="line">1	kafka_metrics</div><div class="line">1	logs</div><div class="line">1	lost+found</div><div class="line">1	media</div><div class="line">1	mnt</div><div class="line">1	srv</div><div class="line">2	sbt</div><div class="line">2	sbt-0.13.9.tgz</div><div class="line">8	bin</div><div class="line">15	sbin</div><div class="line">17	kafka_2.9.1-0.8.2.1.tgz</div><div class="line">19	kafka</div><div class="line">22	lib64</div><div class="line">27	etc</div><div class="line">28	boot</div><div class="line">42	zookeeper</div><div class="line">82	root</div><div class="line">106	var</div><div class="line">148	lib</div><div class="line">1613	usr</div><div class="line">2411	tmp</div><div class="line">9040	opt</div></pre></td></tr></table></figure>
+<h2 id="统计多个文件占用的磁盘情况"><a href="#统计多个文件占用的磁盘情况" class="headerlink" title="统计多个文件占用的磁盘情况"></a>统计多个文件占用的磁盘情况</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ du -ch LICENSE pom.xml</div><div class="line">28K	LICENSE</div><div class="line">44K	pom.xml</div><div class="line">72K	total</div></pre></td></tr></table></figure>
+<h2 id="找出指定目录中最大的10个文件"><a href="#找出指定目录中最大的10个文件" class="headerlink" title="找出指定目录中最大的10个文件"></a>找出指定目录中最大的10个文件</h2><ul>
+<li>统计当前目录下所有文件和目录，输出最大的十个文件或目录</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># du -a:指定所有目录和文件 -k:KB</span></div><div class="line"><span class="comment"># sort -n:按数字排 -r:倒序 -k:按第n列排序</span></div><div class="line">$ du -ak ./* | sort -nrk 1 | head</div><div class="line">10128	./flume-ng-sinks</div><div class="line">6488	./flume-ng-sinks/flume-ng-morphline-solr-sink</div><div class="line">5056	./flume-ng-core</div><div class="line">4284	./flume-ng-channels</div><div class="line">3236	./flume-ng-sinks/flume-ng-morphline-solr-sink/target</div><div class="line">3212	./flume-ng-sinks/flume-ng-morphline-solr-sink/src</div><div class="line">3132	./flume-ng-sinks/flume-ng-morphline-solr-sink/target/<span class="built_in">test</span>-classes</div><div class="line">3124	./flume-ng-sinks/flume-ng-morphline-solr-sink/src/<span class="built_in">test</span></div><div class="line">3088	./flume-ng-core/target</div><div class="line">3032	./flume-ng-sinks/flume-ng-morphline-solr-sink/src/<span class="built_in">test</span>/resources</div></pre></td></tr></table></figure>
+<ul>
+<li>统计当前目录下所有文件，输出最大的十个文件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ find . -type f  -exec du -h &#123;&#125; \; |sort -nrk 1 | head</div><div class="line">848K	./.git/objects/pack/pack-ccf6f43619f071abfc08a7c2068afda5b692506e.idx</div><div class="line">352K	./flume-ng-core/target/flume-ng-core-1.6.0.jar</div><div class="line">292K	./flume-ng-channels/flume-file-channel/target/flume-file-channel-1.6.0.jar</div><div class="line">272K	./flume-ng-channels/flume-file-channel/src/main/java/org/apache/flume/channel/file/proto/ProtosFactory.java</div><div class="line">244K	./flume-ng-sinks/flume-ng-morphline-solr-sink/target/<span class="built_in">test</span>-classes/<span class="built_in">test</span>-documents/sample-statuses-20120906-141433-medium.avro</div><div class="line">244K	./flume-ng-sinks/flume-ng-morphline-solr-sink/src/<span class="built_in">test</span>/resources/<span class="built_in">test</span>-documents/sample-statuses-20120906-141433-medium.avro</div><div class="line">220K	./flume-ng-sinks/flume-ng-morphline-solr-sink/target/<span class="built_in">test</span>-classes/<span class="built_in">test</span>-documents/<span class="built_in">test</span>Keynote.key</div><div class="line">220K	./flume-ng-sinks/flume-ng-morphline-solr-sink/src/<span class="built_in">test</span>/resources/<span class="built_in">test</span>-documents/<span class="built_in">test</span>Keynote.key</div><div class="line">216K	./flume-ng-doc/sphinx/FlumeUserGuide.rst</div><div class="line">164K	./flume-ng-sinks/flume-ng-morphline-solr-sink/target/<span class="built_in">test</span>-classes/<span class="built_in">test</span>-documents/<span class="built_in">test</span>PPT_various.ppt</div></pre></td></tr></table></figure>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+	
+		
+	
+		
+	
+		
+			
+		
+	
+		
+	
+		
+	
+		
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev"><a href="/2015/11/06/linux/shell/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 Jassassin
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+</body>
+</html>

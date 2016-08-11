@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>memory | Wiki</title>
+  <meta name="author" content="Jassassin">
+  
+  <meta name="description" content="引文Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途、创建和销毁的时间，有些区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。下图是Java虚拟机所管理的几个运行时数据区域图:
+
+线程隔离数据区所谓线程隔离数据">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="memory"/>
+  <meta property="og:site_name" content="Wiki"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">Wiki</a><span class="split"></span><span class="title">memory</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2014-06-02</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <h2 id="引文"><a href="#引文" class="headerlink" title="引文"></a>引文</h2><p><a href="http://baike.baidu.com/view/374952.htm?fr=aladdin" target="_blank" rel="external">Java虚拟机</a>在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途、创建和销毁的时间，有些区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。<br>下图是Java虚拟机所管理的几个运行时数据区域图:</p>
+<p><img src="/imgs/jvm/Java-Memory.png" alt="java-memory"></p>
+<h2 id="线程隔离数据区"><a href="#线程隔离数据区" class="headerlink" title="线程隔离数据区"></a>线程隔离数据区</h2><p>所谓线程隔离数据区是指在多线程环境下，每个线程所独享的数据区域。主要有程序计数器、Java虚拟机栈、本地方法栈三个数据区。</p>
+<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p><a href="http://baike.baidu.com/view/178145.htm?fr=aladdin" target="_blank" rel="external">程序计数器</a> — 计算机处理器中的寄存器，它包含当前正在执行的指令的地址（位置）。当每个指令被获取，程序计数器的存储地址加一。在每个指令被获取之后，程序计数器指向顺序中的下一个指令。当计算机重启或复位时，程序计数器通常恢复到零。<br>在Java中<a href="http://baike.baidu.com/view/178145.htm?fr=aladdin" target="_blank" rel="external">程序计数器</a>是一块较小的内存空间，充当当前线程所执行的字节码的行号指示器的角色。<br>在多线程环境下，当某个线程失去处理器执行权时，需要记录该线程被切换出去时所执行的程序位置。从而方便该线程被切换回来(重新被处理器处理)时能恢复到当初的执行位置，因此每个线程都需要有一个独立的<a href="http://baike.baidu.com/view/178145.htm?fr=aladdin" target="_blank" rel="external">程序计数器</a>。各个线程的<a href="http://baike.baidu.com/view/178145.htm?fr=aladdin" target="_blank" rel="external">程序计数器</a>互不影响，并且独立存储。</p>
+<ul>
+<li>当线程正在执行一个java方法时，这个程序计数器记录的时正在执行的虚拟机字节码<a href="http://baike.baidu.com/view/178461.htm?fr=aladdin" target="_blank" rel="external">指令</a>的地址。</li>
+<li>当线程执行的是<a href="http://www.enet.com.cn/article/2007/1029/A20071029886398.shtml" target="_blank" rel="external">Native方法</a>,这个计数器值为空。</li>
+<li>此内存区域是唯一一个在java虚拟机规范中没有规定任何OutOfMemoryError情况的区域。</li>
+</ul>
+<h3 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h3><p>Java虚拟机栈描述的是Java方法执行的内存模型，每个方法在执行的同时都会创建一个<a href="http://baike.baidu.com/view/8128123.htm?fr=aladdin" target="_blank" rel="external">栈帧</a>用于存储<a href="http://blog.csdn.net/kevin_luan/article/details/22986081" target="_blank" rel="external">局部变量表</a>、<a href="http://denverj.iteye.com/blog/1218359" target="_blank" rel="external">操作数栈</a>、<a href="http://jnn.iteye.com/blog/83105" target="_blank" rel="external">动态链接</a>、方法出口等信息。每个方法从调用直至执行完成的过程，对应着一个栈帧在虚拟机中入栈到进栈的过程。</p>
+<ul>
+<li>如果线程请求的栈深度大于虚拟机所能允许的深度时将抛出*StackOverflowError异常(可以通过无限递归呈现此异常)</li>
+<li>如果虚拟机在扩展时无法申请到足够的内存空间，则抛出OutOfMemoryError异常。</li>
+</ul>
+<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>本地方法栈与虚拟机栈作用相似，区别在于虚拟机栈为虚拟机执行Java方法服务，而本地方法栈则为虚拟机使用到得Native方法服务。</p>
+<ul>
+<li>Sun HotSpot虚拟机将本地方法栈和虚拟机栈合二为一了。</li>
+<li>其所会产生与Java虚拟机栈一样异常种类</li>
+</ul>
+<h2 id="线程共享数据区"><a href="#线程共享数据区" class="headerlink" title="线程共享数据区"></a>线程共享数据区</h2><p>所谓线程共享数据区，是指在多线程环境下，该部分区域数据可以被所有线程所共享。主要有Java堆、方法区数据区。</p>
+<h3 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h3><p>大多数情况下，Java堆是Java虚拟机所管理的内存中最大的一块。该内存区域被所有线程所共享。其中主要用于存放对象实例以及数组等。</p>
+<ul>
+<li>Java堆是垃圾收集器管理的主要区域。一般该区域又分为新生代和老年代(该部分会在Java垃圾收集器笔记中详述)。</li>
+<li>当堆中无法存放最近一次产生的对象实例时便会产生OutOfMemoryError异常。</li>
+</ul>
+<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>Java方法区被各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。很多时候这部分区别被称为永久代(Permanent Generation).垃圾收集行为在这个区域比较少出现，这个区域的内存回收目标主要针对常量池的回收和对类型的卸载。</p>
+<ul>
+<li>当方法区无法满足内存分配需求时，将抛出OutOfMemoryError异常</li>
+</ul>
+<h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3><p>运行时常量池(Runtime Constant Pool)是方法区的一部分。其用于存放Java编译期生成的各种字面量和符号引用。</p>
+<ul>
+<li>运行期间也可能将新的常量放入常量池中，如String的intern()方法</li>
+<li>当常量池无法申请到足够内存时会抛出OutOfMemoryError异常</li>
+</ul>
+<h2 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h2><p>直接内存(Direct Memory)并不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域。<br>JDK1.4中出现了NIO，其引入了一种基于通道(Channel)与缓冲区(Buffer)的I/O方式，它可以使用<a href="http://blog.csdn.net/gogor/article/details/6565665" target="_blank" rel="external">Native函数库</a>直接分配堆外内存，然后通过一个存储在Java堆中得DirectoryByteBuffer对象作为这块内存的引用进行操作。这样可以避免Java堆和Native堆之间的来回复制数据。</p>
+<ul>
+<li>当机器直接内存去除JVM内存之后的内存不能满足直接内存大小要求其，将会抛出OutOfMemoryError异常。</li>
+</ul>
+<hr>
+<p>参考 <a href="http://item.jd.com/11252778.html" target="_blank" rel="external">深入Java虚拟机</a>/chapter02 Java内存区域与内存溢出异常</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+			
+		
+	
+		
+			
+		
+	
+		
+			
+			
+		
+	
+	
+	
+		<li class="prev"><a href="/2014/06/05/jvm/jvm-gc-alg/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 Jassassin
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>funcation | Wiki</title>
+  <meta name="author" content="Jassassin">
+  
+  <meta name="description" content="本文主要记录了Scala中的条件表达式、循环控制以及函数定义等内容!
+if语句scala中的if/else语句会有输出,因此可以将该输出赋值给其他变量. 示例:
+1234567891011scala&amp;gt; var x = 1x: Int = 1# 将if语句的结果赋值给变量yscala&amp;gt; v">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="funcation"/>
+  <meta property="og:site_name" content="Wiki"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">Wiki</a><span class="split"></span><span class="title">funcation</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2015-04-24</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <p>本文主要记录了Scala中的条件表达式、循环控制以及函数定义等内容!</p>
+<h2 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h2><p>scala中的<code>if/else</code>语句会有输出,因此可以将该输出赋值给其他变量. 示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">scala&gt; var x = 1</div><div class="line">x: Int = 1</div><div class="line"></div><div class="line"><span class="comment"># 将if语句的结果赋值给变量y</span></div><div class="line">scala&gt; var y = <span class="keyword">if</span> (x &gt; 0) <span class="string">"&gt;0"</span> <span class="keyword">else</span> <span class="string">"&lt;0"</span></div><div class="line">y: String = &gt;0</div><div class="line"></div><div class="line"><span class="comment"># 如果if和else中返回的是不同类型，则会返回它们的公共父类型。</span></div><div class="line"><span class="comment"># 如下面的String和Int的超类型Any</span></div><div class="line">scala&gt; var r = <span class="keyword">if</span>(x&gt;1) <span class="string">"hello"</span> <span class="keyword">else</span> 0</div><div class="line">r: Any = 0</div></pre></td></tr></table></figure>
+<p><code>else</code>部分:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 如果没有else部分,相当于 var z = if (x &gt; 2) "&gt;0" else ()</span></div><div class="line"><span class="comment"># "()"代表`没有值`的占位符,或者Unit类型(相当于java中的void)</span></div><div class="line">scala&gt; var z = <span class="keyword">if</span> (x &gt; 2) <span class="string">"&gt;0"</span></div><div class="line">z: Any = ()</div></pre></td></tr></table></figure>
+<h2 id="语句块"><a href="#语句块" class="headerlink" title="语句块"></a>语句块</h2><p>scala中的语句块<code>{}</code>是有值的，该值是块中的最后一个表达式的值。注意对于赋值语句的表达式其结果是Unit类型，即结果为空(<code>()</code>).示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 最后一个表达式"a + b"的结果赋值给了sum</span></div><div class="line">scala&gt; var sum = &#123;var a =1; var b =2; a+b&#125;</div><div class="line">sum: Int = 3</div><div class="line"></div><div class="line">scala&gt; println(sum)</div><div class="line">3</div><div class="line"></div><div class="line"><span class="comment"># 因为语句块的最后一个表达式是赋值表达式，因此sum2的结果是Unit类型</span></div><div class="line">scala&gt; var sum2 = &#123;var a =1; var b =2&#125;</div><div class="line">sum2: Unit = ()</div></pre></td></tr></table></figure>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><h3 id="while"><a href="#while" class="headerlink" title="while"></a>while</h3><p>Scala中的while和do循环和java类似，示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var n = 10</div><div class="line"><span class="keyword">while</span>(n &gt; 0)&#123;</div><div class="line">     //scala中没有++或--操作符</div><div class="line">     n -= 1</div><div class="line">     println(n)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="for"><a href="#for" class="headerlink" title="for"></a>for</h3><p>scala中没有类似java中的<code>for(int i = 0; i &lt; b; i++){}</code>循环结构，在scala中常使用如下for循环:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var n = 10</div><div class="line"><span class="keyword">for</span>(i &lt;- 1 to n)&#123;</div><div class="line">   <span class="built_in">print</span>(i + <span class="string">","</span>)</div><div class="line">&#125;</div><div class="line">----------------------------输出--------------------------------</div><div class="line">1,2,3,4,5,6,7,8,9,10,</div></pre></td></tr></table></figure>
+<p>对于<code>1 to n</code>实际是调用<code>RichInt</code>类的to方法返回1到数字n(包含n)的Range区间,而<code>for(i &lt;- 表达式)</code>意思是让i遍历<code>&lt;-</code>右边的表达式的所有值。<br>从上面示例代码输出可以看出<code>1 to n</code>是包含n的，而有时我们需要i的值从1到n-1,此时可以使用<code>until</code>方法，示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">object cycle&#123;</div><div class="line"></div><div class="line">  def main(args: Array[String]): Unit = &#123;</div><div class="line">       var str = <span class="string">"jassassin"</span></div><div class="line">       println(str + <span class="string">"length:"</span> + str.length())</div><div class="line">       <span class="keyword">for</span>(index &lt;- 0 until str.length())&#123;</div><div class="line">         println(str(index) + <span class="string">" --- "</span> + index)</div><div class="line">       &#125;</div><div class="line">       println(<span class="string">"----------------------"</span>)</div><div class="line">	//遍历方式二</div><div class="line">       <span class="keyword">for</span>(char &lt;- str)&#123;</div><div class="line">         <span class="built_in">print</span>(char + <span class="string">" "</span>)</div><div class="line">       &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line">----------------------------输出--------------------------------</div><div class="line">//注意index值从0-&gt;8并未到9</div><div class="line">jassassin length:9</div><div class="line">j --- 0</div><div class="line">a --- 1</div><div class="line">s --- 2</div><div class="line">s --- 3</div><div class="line">a --- 4</div><div class="line">s --- 5</div><div class="line">s --- 6</div><div class="line">i --- 7</div><div class="line">n --- 8  </div><div class="line">----------------------</div><div class="line">j a s s a s s i n</div></pre></td></tr></table></figure>
+<h3 id="高级for循环"><a href="#高级for循环" class="headerlink" title="高级for循环"></a>高级for循环</h3><p>scala中的for循环可以以<code>变量 &lt;- 表达式</code>形式提供多个生成器，并用分号进行分隔，示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(i &lt;- 1 to 3; j &lt;- 1 until 3; k &lt;- 1 to 3)&#123;</div><div class="line">   <span class="built_in">print</span>(i * 100 + j * 10 + k + <span class="string">" "</span>)</div><div class="line">&#125;</div><div class="line">----------------------------输出--------------------------------</div><div class="line">111 112 113 121 122 123 211 212 213 221 222 223 311 312 313 321 322 323</div></pre></td></tr></table></figure>
+<p><code>变量 &lt;- 表达式</code>可以同时携带一个if开头的Boolean表达式:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//注意<span class="string">"k &lt;- 1 to 3 if k != i"</span>,<span class="keyword">if</span>之前并没有<span class="string">";"</span></div><div class="line"><span class="keyword">for</span>(i &lt;- 1 to 3; j &lt;- 1 until 3; k &lt;- 1 to 3 <span class="keyword">if</span> k != i)&#123;</div><div class="line">  <span class="built_in">print</span>(i * 100 + j * 10 + k + <span class="string">" "</span>)</div><div class="line">&#125;</div><div class="line">----------------------------输出--------------------------------</div><div class="line">112 113 122 123 211 213 221 223 311 312 321 322</div></pre></td></tr></table></figure>
+<h3 id="for推导式"><a href="#for推导式" class="headerlink" title="for推导式"></a>for推导式</h3><p>如果for循环的循环体以<code>yield</code>开头，则该循环会构造一个集合,每次迭代会生成该集合中的一个值:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="keyword">for</span>(i &lt;- 0 to 10) yield i</div><div class="line">res1: scala.collection.immutable.IndexedSeq[Int] = Vector(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)</div><div class="line">scala&gt; <span class="keyword">for</span>(i &lt;- 0 to 10) yield &#123;i+1&#125;</div><div class="line">res2: scala.collection.immutable.IndexedSeq[Int] = Vector(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)</div></pre></td></tr></table></figure>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="函数定义"><a href="#函数定义" class="headerlink" title="函数定义"></a>函数定义</h3><p>scala中的函数以<code>def</code>开头,示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">scala&gt; def abs(x: Double) = <span class="keyword">if</span>(x &gt; 0) x <span class="keyword">else</span> -x</div><div class="line">abs: (x: Double)Double</div><div class="line"></div><div class="line">scala&gt; abs(-19)</div><div class="line">res3: Double = 19.0</div></pre></td></tr></table></figure>
+<p>Scala中的函数参数必须给出参数的类型(x: Double)，同时scala编译器可以通过<code>=</code>右侧的表达式推测出返回值类型!但是对于递归函数则必须指定返回值类型:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">scala&gt; def fac(n: Int): Int = <span class="keyword">if</span>(n &lt;= 0) 1 <span class="keyword">else</span> n * fac(n-1)</div><div class="line">fac: (n: Int)Int</div><div class="line"></div><div class="line">scala&gt; fac(3)</div><div class="line">res4: Int = 6</div></pre></td></tr></table></figure>
+<p>如何函数块中含有多行代码，则可以用<code>{}</code>包括进来!同时该代码块的最后一行表达式是该函数的返回值。见本文<code>语句块</code>!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">def fac(n: Int) = &#123;</div><div class="line">   var r = 1</div><div class="line"></div><div class="line">   <span class="keyword">for</span>(i &lt;- 1 to n)&#123;</div><div class="line">      r = r * i</div><div class="line">    &#125;</div><div class="line">    //该的值即为函数返回值</div><div class="line">   r</div><div class="line">&#125;</div><div class="line"></div><div class="line">def main(args: Array[String]): Unit = &#123;</div><div class="line">  println(fac(5))</div><div class="line">&#125;</div><div class="line">----------------------------输出--------------------------------</div><div class="line">120</div></pre></td></tr></table></figure>
+<p>注:Scala中的<code>return</code>语句常用在匿名函数中，相当于函数break.用于跳出当前匿名函数到包含它的外围有名函数中去!</p>
+<h3 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h3><h4 id="默认参数"><a href="#默认参数" class="headerlink" title="默认参数"></a>默认参数</h4><p>示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># p2,p3均有默认参数</span></div><div class="line">scala&gt; def output(p1: String,p2: String = <span class="string">"["</span>,p3: String = <span class="string">"]"</span>) = p2 + p1 + p3</div><div class="line">ouput: (p1: String, p2: String, p3: String)String</div><div class="line"></div><div class="line"><span class="comment"># 使用默认参数</span></div><div class="line">scala&gt; output(<span class="string">"jassassin"</span>)</div><div class="line">res6: String = [jassassin]</div><div class="line"></div><div class="line"><span class="comment"># 使用自定义参数</span></div><div class="line">scala&gt; output(<span class="string">"jassassin"</span>,<span class="string">"&lt;&lt;"</span>,<span class="string">"&gt;&gt;"</span>)</div><div class="line">res7: String = &lt;&lt;jassassin&gt;&gt;</div><div class="line"></div><div class="line">scala&gt; output(<span class="string">"jassassin"</span>,<span class="string">"&lt;&lt;"</span>)</div><div class="line">res8: String = &lt;&lt;jassassin]</div></pre></td></tr></table></figure>
+<h4 id="带名参数"><a href="#带名参数" class="headerlink" title="带名参数"></a>带名参数</h4><p>调用scala函数传递参数时，可以同时传递参数名称，这样调用函数的参数顺序可以自由排列。如上面的ouput函数:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scala&gt; output(p3=<span class="string">"&gt;"</span>,p1=<span class="string">"eagle"</span>,p2=<span class="string">"&lt;"</span>)</div><div class="line">res3: String = &lt;eagle&gt;</div></pre></td></tr></table></figure>
+<h4 id="可变长参数"><a href="#可变长参数" class="headerlink" title="可变长参数"></a>可变长参数</h4><p>如下可接受可变长参数的函数:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">def sum(arg: Int*) = &#123;</div><div class="line">    var sum = 0</div><div class="line">    <span class="keyword">for</span>(i &lt;- arg)&#123;</div><div class="line">      sum += i</div><div class="line">    &#125;</div><div class="line">    sum</div><div class="line">&#125;</div><div class="line"></div><div class="line">//调用</div><div class="line">sum(1,2,3,4)</div><div class="line">----------------------------输出--------------------------------</div><div class="line">10</div></pre></td></tr></table></figure>
+<p>注:如果调用此函数时传递的是单个参数，则该参数必须是单个整数，而不是一个整数区间!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">scala&gt; sum(1 to 5)</div><div class="line">&lt;console&gt;:9: error: <span class="built_in">type</span> mismatch;</div><div class="line"> found   : scala.collection.immutable.Range.Inclusive</div><div class="line"> required: Int</div><div class="line">              sum(1 to 5)</div><div class="line">                    ^</div></pre></td></tr></table></figure>
+<p>解决方式:追加<code>_*</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scala&gt; sum(1 to 5: _*)</div><div class="line">res6: Int = 15</div></pre></td></tr></table></figure>
+<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p>如果函数体包含在<code>{}</code>中，但是前面没有”=”。则称这样函数为过程!过程不返回值，调用它只是为了它的副作用，如下面的打印参数:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">scala&gt; def p(arg: String)&#123;<span class="built_in">print</span>(arg)&#125;</div><div class="line">p: (arg: String)Unit</div><div class="line"></div><div class="line">scala&gt; p(<span class="string">"eagle"</span>)</div><div class="line">eagle</div></pre></td></tr></table></figure>
+<p>通常建议的写法是显示声明函数返回值为<code>Unit</code>,从而尽量提醒比如java程序员习惯性的误调用!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">scala&gt; def out(arg: String): Unit = &#123;<span class="built_in">print</span>(arg)&#125;</div><div class="line">out: (arg: String)Unit</div><div class="line"></div><div class="line">scala&gt; out(<span class="string">"eagle"</span>)</div><div class="line">eagle</div><div class="line"></div><div class="line"><span class="comment"># 这里定义变量result期望获取out()函数的输出"eagle",而实际获得的是Unit</span></div><div class="line">scala&gt; var result = out(<span class="string">"eagle"</span>)</div><div class="line">eagleresult: Unit = ()</div><div class="line"></div><div class="line">scala&gt; <span class="built_in">print</span>(result)</div><div class="line">()</div></pre></td></tr></table></figure>
+<h2 id="惰性初始化"><a href="#惰性初始化" class="headerlink" title="惰性初始化"></a>惰性初始化</h2><p>当val类型的变量被<code>lazy</code>修饰时，那么该变量的初始化将被延迟至它第一次被访问。该特性常用于初始化开销比较大的应用，如文件读取!</p>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p>Scala中的异常和java中的基本一致，不同的是scala中没有”检查”型异常。因此scala中的方法签名中不会显示的标识<code>someMethod() throws IOException,XXException ...</code></p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+			
+		
+	
+		
+			
+		
+	
+		
+	
+		
+			
+		
+	
+		
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev"><a href="/2015/04/25/scala/scala-collection/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 Jassassin
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+</body>
+</html>

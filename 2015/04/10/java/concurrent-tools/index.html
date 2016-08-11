@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>concurrent tools | Wiki</title>
+  <meta name="author" content="Jassassin">
+  
+  <meta name="description" content="引文同步工具类可以使任何一种对象，只要该对象可以根据自身的状态来协调控制线程的控制流。阻塞队列可以作为同步工具类，其他类型的同步工具类还包括：信号量（Semaphore）、栅栏（Barrier）以及闭锁（Latch）等。
+1. 闭锁CountDownLatchCountDownLatch 闭锁: 可以延迟线程的进度，直到锁到达终止状态。闭锁的作用相当于一扇门，在锁到达终止状态之前这扇门一直是关闭的。当锁到达终止状态时，允许所有线程通过。CountDownLatch有一个初始值，通过调用countDown方法可以减少该值，一直到0时到达终止状态。闭锁可以用来确保某些活动直到其它活动都完成后才继续执行，例如：
+
+确保某个计算在其所有资源都被初始化之后才继续执行。二元闭锁（只有两个状态）可以用来表示“资源R已经被初始化”，而所有需要R操作都必须先在这个闭锁上等待。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="concurrent tools"/>
+  <meta property="og:site_name" content="Wiki"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">Wiki</a><span class="split"></span><span class="title">concurrent tools</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2015-04-10</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <h2 id="引文"><a href="#引文" class="headerlink" title="引文"></a>引文</h2><p>同步工具类可以使任何一种对象，只要该对象可以根据自身的状态来协调控制线程的控制流。阻塞队列可以作为同步工具类，其他类型的同步工具类还包括：信号量（Semaphore）、栅栏（Barrier）以及闭锁（Latch）等。</p>
+<h2 id="1-闭锁CountDownLatch"><a href="#1-闭锁CountDownLatch" class="headerlink" title="1. 闭锁CountDownLatch"></a>1. 闭锁CountDownLatch</h2><p>CountDownLatch 闭锁: 可以延迟线程的进度，直到锁到达终止状态。闭锁的作用相当于一扇门，在锁到达终止状态之前这扇门一直是关闭的。当锁到达终止状态时，允许所有线程通过。CountDownLatch有一个初始值，通过调用<code>countDown</code>方法可以减少该值，一直到0时到达终止状态。<br>闭锁可以用来确保某些活动直到其它活动都完成后才继续执行，例如：</p>
+<ol>
+<li>确保某个计算在其所有资源都被初始化之后才继续执行。二元闭锁（只有两个状态）可以用来表示“资源R已经被初始化”，而所有需要R操作都必须先在这个闭锁上等待。</li>
+</ol>
+<a id="more"></a>
+<ol>
+<li>确保某个服务在所有其他服务都已经启动之后才启动。这时就需要多个闭锁。让S在每个闭锁上等待，只有所有的闭锁都打开后才会继续运行。</li>
+<li>等待直到某个操作的参与者（例如，多玩家游戏中的玩家）都就绪再继续执行。在这种情况下，当所有玩家都准备就绪时，闭锁将到达结束状态。</li>
+</ol>
+<p>Demo:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 闭锁  延迟线程进度直到线程到达某个状态</div><div class="line"> * <span class="doctag">@author</span> eagle</div><div class="line"> * <span class="doctag">@date</span> 2015年4月14日</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountDownLatchDemo</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">		<span class="comment">//count(2): 在线程通过此闭锁门之前，CountDownLatch的countDown方法必须被线程调用的次数</span></div><div class="line">		CountDownLatch latch = <span class="keyword">new</span> CountDownLatch(<span class="number">2</span>);</div><div class="line">		Worker worker1 = <span class="keyword">new</span> Worker(latch);</div><div class="line">		Worker worker2 = <span class="keyword">new</span> Worker(latch);</div><div class="line"></div><div class="line">		<span class="comment">//启动线程</span></div><div class="line">		worker1.start();</div><div class="line">		worker2.start();</div><div class="line"></div><div class="line">		<span class="comment">//await()方法则阻塞，直到计数器值count变为0</span></div><div class="line">		latch.await();</div><div class="line"></div><div class="line">		System.out.println(Thread.currentThread().getName() + <span class="string">": over!"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Worker</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</div><div class="line">		<span class="keyword">private</span> CountDownLatch latch;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Worker</span><span class="params">(CountDownLatch latch)</span></span>&#123;</div><div class="line">			<span class="keyword">this</span>.latch = latch;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			System.out.println(Thread.currentThread().getName() + <span class="string">": running!"</span>);</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				Thread.sleep(<span class="number">1000</span>);</div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">			latch.countDown();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="2-FutureTask"><a href="#2-FutureTask" class="headerlink" title="2. FutureTask"></a>2. FutureTask</h2><p>FutureTask: 用于执行一个可返回结果的长任务，任务在单独的线程中执行，其他线程可以用<code>get</code>方法取任务结果，如果任务尚未完成，线程在get上阻塞。<br>FutureTask也可以用作闭锁。它表示一种抽象的可生成结果的计算。是通过<code>Callable</code>来实现的，相当于一种可生成结果的<code>Runnable</code>，并且可处于以下三种状态：等待运行，正在运行，运行完成。当FutureTask进入完成状态后，它会停留在这个状态上。<code>Future.get</code>方法用来获取计算结果，如果FutureTask还未运行完成，则会阻塞。FutureTask将计算结果从执行计算的线程传递到获取这个结果的线程，而FutureTask 的规范确保了这种传递过程能实现结果的安全发布。FutureTask在Executor框架中表示异步任务，还可以用来表示一些时间较长的计算。<br><img src="/imgs/java/futureTask.jpg" alt="futureTask"><br>Demo:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">import java.util.concurrent.Callable;</div><div class="line">import java.util.concurrent.ExecutionException;</div><div class="line">import java.util.concurrent.ExecutorService;</div><div class="line">import java.util.concurrent.Executors;</div><div class="line">import java.util.concurrent.FutureTask;</div><div class="line"></div><div class="line">/**</div><div class="line"> * FutureTask可以作为闭锁使用。该类的计算是通过Callable实现的，它等价于一个可携带结果的Runnable，</div><div class="line"> * 并且有3个状态:等待、运行、完成</div><div class="line"> * 完成包括所有计算以任意的方式结束，包括正常结束、取消和异常</div><div class="line"> * @author eagle</div><div class="line"> * @date 2015年4月15日</div><div class="line"> */</div><div class="line">public class FutureTaskTest &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) throws InterruptedException, ExecutionException &#123;</div><div class="line">		ExecutorService executorService = Executors.newFixedThreadPool(2);</div><div class="line">		FutureTask&lt;String&gt; futureTask = new FutureTask&lt;String&gt;(new Task());</div><div class="line">		//启动task线程</div><div class="line">		executorService.submit(futureTask);</div><div class="line">		//住线程继续运行</div><div class="line">		System.out.println(<span class="string">"main thread run over!"</span>);</div><div class="line">		//检查task是否执行完毕</div><div class="line">		<span class="keyword">while</span>(!futureTask.isDone())&#123;</div><div class="line">			System.out.println(<span class="string">"futureTask status is running!"</span>);</div><div class="line">		&#125;</div><div class="line">		System.out.println(<span class="string">"task run over!"</span>);</div><div class="line">		//获取线程执行结果，这里会阻塞直到线程执行完毕返回结果</div><div class="line">		String result = futureTask.get();</div><div class="line">		System.out.println(<span class="string">"task run result:"</span> + result);</div><div class="line">		executorService.shutdown();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	private static class Task implements Callable&lt;String&gt;&#123;</div><div class="line"></div><div class="line">		@Override</div><div class="line">		public String call() throws Exception &#123;</div><div class="line">			Thread.sleep(10);</div><div class="line">			System.out.println(<span class="string">"task be called!"</span>);</div><div class="line">			<span class="built_in">return</span> <span class="string">"task"</span>;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="3-Semaphore"><a href="#3-Semaphore" class="headerlink" title="3. Semaphore"></a>3. Semaphore</h2><p>Semaphore信号量:</p>
+<ul>
+<li>用于控制同时访问某资源，或同时执行某操作的线程数目。Semaphone管理这一组许可（permit），可通过构造函数指定。提供了阻塞方法<code>acquire</code>，用来获取许可。同时提供了<code>release</code>方法表示释放一个许可。</li>
+<li>之前的闭锁控制的是访问时间，而信号量则用来控制访问某个特定资源的操作数量，控制空间。而且闭锁只能够减少，一次性使用，而信号量则申请可释放，可增可减。 计数信号量还可以用来实现某种资源池，或者对容器施加边界。</li>
+<li>Semaphone可以将任何一种容器变为有界阻塞容器，如用于实现资源池。例如数据库连接池。我们可以构造一个固定长度的连接池，使用阻塞方法 acquire和release获取释放连接，而不是获取不到便失败。</li>
+</ul>
+<p>Demo:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Semaphore;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Semaphore实现的功能就类似厕所有5个坑，假如有10个人要上厕所，那么同时只能有多少个人去上厕所呢？</div><div class="line"> * 同时只能有5个人能够占用，当5个人中 的任何一个人让开后，其中等待的另外5个人中又有一个人可以占用了。</div><div class="line"> * 另外等待的5个人中可以是随机获得优先机会，也可以是按照先来后到的顺序获得机会，这取决于构造Semaphore对象时</div><div class="line"> * 传入的参数选项。单个信号量的Semaphore对象可以实现互斥锁的功能，并且可以是由一个线程获得了“锁”，</div><div class="line"> * 再由另一个线程释放“锁”，这可应用于死锁恢复的一些场合。</div><div class="line"> * <span class="doctag">@author</span> eagle</div><div class="line"> * <span class="doctag">@date</span> 2015年4月15日</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SemaphoreTest</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		ExecutorService executorService = Executors.newCachedThreadPool();</div><div class="line">		<span class="comment">//初始化5个许可证</span></div><div class="line">		Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">5</span>);</div><div class="line">		<span class="comment">//启动50个线程运行</span></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">50</span>; i++)&#123;</div><div class="line">			executorService.submit(<span class="keyword">new</span> Task(semaphore));</div><div class="line">		&#125;</div><div class="line">		executorService.shutdown();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Task</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">private</span> Semaphore semaphore;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Task</span><span class="params">(Semaphore semaphore)</span></span>&#123;</div><div class="line">			<span class="keyword">this</span>.semaphore = semaphore;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				semaphore.acquire();</div><div class="line">				System.out.println(Thread.currentThread().getName()</div><div class="line">							+ <span class="string">" is running!"</span>);</div><div class="line">				Thread.sleep(<span class="number">1000</span>);</div><div class="line">				semaphore.release();</div><div class="line">				 System.out.println(<span class="string">"------"</span> + semaphore.availablePermits());</div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="4-CyclicBarrier"><a href="#4-CyclicBarrier" class="headerlink" title="4. CyclicBarrier"></a>4. CyclicBarrier</h2><p>CyclicBarrier栅栏: 用于多个线程多次迭代时进行同步，在一轮任务中，任何线程完成任务后都在<code>barrier</code>上等待，直到所有其他线程也完成任务，然后一起释放，同时进入下一轮迭代。<br>栅栏（Bariier）类似于闭锁，它能阻塞一组线程知道某个事件发生。栅栏与闭锁的关键区别在于，所有的线程必须同时到达栅栏位置，才能继续执行。闭锁用于等待等待时间，而栅栏用于等待线程。<br>CyclicBarrier可以使一定数量的参与方反复的在栅栏位置汇聚，它在并行迭代算法中非常有用：将一个问题拆成一系列相互独立的子问题。当线程到达栅栏位置时，调用await()方法，这个方法是阻塞方法，直到所有线程到达了栅栏位置，那么栅栏被打开，此时所有线程被释放，而栅栏将被重置以便下次使用.<br>Demo:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.concurrent.BrokenBarrierException;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.CyclicBarrier;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 一个同步辅助类，它允许一组线程互相等待，直到到达某个公共屏障点 (common barrier point)。</div><div class="line"> * 在涉及一组固定大小的线程的程序中，这些线程必须不时地互相等待，此时 CyclicBarrier 很有用。因为该 barrier</div><div class="line"> * 在释放等待线程后可以重用，所以称它为循环 的 barrier</div><div class="line"> * <span class="doctag">@author</span> eagle</div><div class="line"> * <span class="doctag">@date</span> 2015年4月15日</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CyclicBarrierTest</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		ExecutorService executorService = Executors.newCachedThreadPool();</div><div class="line"></div><div class="line">		<span class="comment">//注意，这里CyclicBarrier构造传入的parties参数值是3，那么应该有三个线程，否则会一直阻塞下去</span></div><div class="line">		CyclicBarrier cyclicBarrier = <span class="keyword">new</span> CyclicBarrier(<span class="number">3</span>);</div><div class="line"></div><div class="line">		executorService.submit(<span class="keyword">new</span> Runner(cyclicBarrier, <span class="string">"jack"</span>));</div><div class="line">		executorService.submit(<span class="keyword">new</span> Runner(cyclicBarrier, <span class="string">"rose"</span>));</div><div class="line">		executorService.submit(<span class="keyword">new</span> Runner(cyclicBarrier, <span class="string">"tony"</span>));</div><div class="line"></div><div class="line">		executorService.shutdown();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Runner</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">private</span> CyclicBarrier cyclicBarrier;</div><div class="line">		<span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Runner</span><span class="params">(CyclicBarrier cyclicBarrier, String name)</span> </span>&#123;</div><div class="line">			<span class="keyword">super</span>();</div><div class="line">			<span class="keyword">this</span>.cyclicBarrier = cyclicBarrier;</div><div class="line">			<span class="keyword">this</span>.name = name;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				Thread.sleep(<span class="number">2000</span>);</div><div class="line">				System.out.println(name + <span class="string">" is ready ..."</span>);</div><div class="line">				<span class="comment">//等待所有线程都ready就绪</span></div><div class="line">				<span class="keyword">this</span>.cyclicBarrier.await();</div><div class="line">				<span class="comment">//所有线程都ready就绪，同时开始running</span></div><div class="line">				System.out.println(name + <span class="string">" is running ..."</span>);</div><div class="line">				<span class="comment">//等待所有线程running结束</span></div><div class="line">				<span class="keyword">this</span>.cyclicBarrier.await();</div><div class="line">				System.out.println(name + <span class="string">" is run over ..."</span>);</div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125; <span class="keyword">catch</span> (BrokenBarrierException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<p>参考:</p>
+<ul>
+<li><a href="http://www.2cto.com/kf/201412/359051.html" target="_blank" rel="external">Java 并发编程（四）常用同步工具类</a></li>
+</ul>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 Jassassin
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+</body>
+</html>

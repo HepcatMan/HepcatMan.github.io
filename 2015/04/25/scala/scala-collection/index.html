@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>arry&amp;collection | Wiki</title>
+  <meta name="author" content="Jassassin">
+  
+  <meta name="description" content="本文主要记录Scala中的数组(定长数组与可变长数组)定义以及常用操作,同时将映射(类似java中的集合类)以及元组也放在了这里!
+数组定长数组在JVM中，Scala的Array以Java数组的方式实现。Int、Double或其他与Java中基本类型对应的数组都是基本类型数组。比如Array(“a”">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="arry&amp;collection"/>
+  <meta property="og:site_name" content="Wiki"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">Wiki</a><span class="split"></span><span class="title">arry&amp;collection</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2015-04-25</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <p>本文主要记录Scala中的数组(定长数组与可变长数组)定义以及常用操作,同时将映射(类似java中的集合类)以及元组也放在了这里!</p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="定长数组"><a href="#定长数组" class="headerlink" title="定长数组"></a>定长数组</h3><p>在JVM中，Scala的Array以Java数组的方式实现。Int、Double或其他与Java中基本类型对应的数组都是基本类型数组。比如Array(“a”,”b”,”c”)在JVM中就是一个String[]。下面是使用Scala中得Array实现的长度不变的数组:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 长度为5的Int类型的定长数组，初始值都是0</span></div><div class="line">scala&gt; val nums = new Array[Int](5)</div><div class="line">nums: Array[Int] = Array(0, 0, 0, 0, 0)</div><div class="line"></div><div class="line"><span class="comment"># 长度为5的String类型的定长数组，初始值都是null</span></div><div class="line">scala&gt; val a = new Array[String](5)</div><div class="line">a: Array[String] = Array(null, null, null, null, null)</div><div class="line"></div><div class="line"><span class="comment"># 长度为2的String类型的定长数组，直接初始化</span></div><div class="line">scala&gt; val s = Array(<span class="string">"jassassin"</span>,<span class="string">"eagle"</span>)</div><div class="line">s: Array[String] = Array(jassassin, eagle)</div><div class="line"></div><div class="line"><span class="comment"># 数组长度不可改变</span></div><div class="line">scala&gt; s(2) = <span class="string">"bye"</span></div><div class="line">java.lang.ArrayIndexOutOfBoundsException: 2</div><div class="line">  ... 33 elided</div><div class="line"></div><div class="line"><span class="comment"># 注意数组中的值的访问形式是通过"()"，而不是"[]"</span></div><div class="line">scala&gt; s(1) = <span class="string">"bye"</span></div></pre></td></tr></table></figure>
+<p>注: <em> 数组元素的访问方式是<code>s(1)</code>而不是<code>s[1]</code></em></p>
+<h3 id="可变长数组ArrayBuffer"><a href="#可变长数组ArrayBuffer" class="headerlink" title="可变长数组ArrayBuffer"></a>可变长数组ArrayBuffer</h3><p>Scala中使用ArrayBuffer,实现类似java中得ArrayList可变长数组。下面的示例是我在terminal中测试的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 引入ArrayBuffer类</span></div><div class="line">scala&gt; import scala.collection.mutable.ArrayBuffer</div><div class="line">import scala.collection.mutable.ArrayBuffer</div><div class="line"></div><div class="line"><span class="comment"># 定义Int类型的ArrayBuffer</span></div><div class="line">scala&gt; val arr = ArrayBuffer[Int]()</div><div class="line">arr: scala.collection.mutable.ArrayBuffer[Int] = ArrayBuffer()</div><div class="line"></div><div class="line"><span class="comment"># 使用"+="在尾端添加元素</span></div><div class="line">scala&gt; arr += 1</div><div class="line">res5: arr.type = ArrayBuffer(1)</div><div class="line"></div><div class="line"><span class="comment"># 使用"+="在尾端添加元素，多个元素用"()"括起来</span></div><div class="line">scala&gt; arr += (1,2,3,4,5)</div><div class="line">res7: arr.type = ArrayBuffer(1, 1, 2, 3, 4, 5)</div><div class="line"></div><div class="line"><span class="comment"># 使用"++="追加集合</span></div><div class="line">scala&gt; arr ++= Array(1,2,3,4,5)</div><div class="line">res8: arr.type = ArrayBuffer(1, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)</div><div class="line"></div><div class="line"><span class="comment"># 去除最后5个元素</span></div><div class="line">scala&gt; arr.trimEnd(5)</div><div class="line"></div><div class="line">scala&gt; println(arr)</div><div class="line">ArrayBuffer(1, 1, 2, 3, 4, 5)</div><div class="line"></div><div class="line"><span class="comment"># 去除第一个元素</span></div><div class="line">scala&gt; arr.trimStart(1)</div><div class="line"></div><div class="line">scala&gt; println(arr)</div><div class="line">ArrayBuffer(1, 2, 3, 4, 5)</div></pre></td></tr></table></figure>
+<p>你也可以像下面这样将上面的代码写入Demo.scala文件中:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> scala.collection.mutable.ArrayBuffer</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line">  <span class="doctag">@autor</span> jassassin</div><div class="line">  <span class="doctag">@description</span> Scala数组</div><div class="line">*/</div><div class="line">object Demo&#123;</div><div class="line"></div><div class="line">	<span class="function">def <span class="title">main</span><span class="params">(args: Array[String])</span>: Unit </span>= &#123;</div><div class="line"></div><div class="line">		<span class="comment">//定义可变长的Int数组ArrayBuffer</span></div><div class="line">		val arr = ArrayBuffer[Int]()</div><div class="line"></div><div class="line">		arr += <span class="number">1</span></div><div class="line">		arr += (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)</div><div class="line">		arr ++= Array(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)</div><div class="line"></div><div class="line">		printArr(arr)</div><div class="line"></div><div class="line">		println(<span class="string">"\n-------trimEnd(3)------------"</span>)</div><div class="line">		arr.trimEnd(<span class="number">3</span>)</div><div class="line">		printArr(arr)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 打印ArrayBuffer</div><div class="line">	*/</div><div class="line">	<span class="function">def <span class="title">printArr</span><span class="params">(arr: ArrayBuffer[Int])</span></span>&#123;</div><div class="line">		print(<span class="string">"arr:"</span>)</div><div class="line">		<span class="keyword">for</span>(i &lt;- arr)&#123;</div><div class="line">			print(i + <span class="string">" "</span>)</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//换行</span></div><div class="line">		println()</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">RUN: scala Demo.scala</div><div class="line">----------------------------输出--------------------------------</div><div class="line">arr:<span class="number">1</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span></div><div class="line"></div><div class="line">-------trimEnd(<span class="number">3</span>)------------</div><div class="line">arr:<span class="number">1</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">1</span> <span class="number">2</span></div></pre></td></tr></table></figure>
+<p>对于ArrayBuffer，如果在数组中间插入元素由于需要将插入位置之后的所有后移，因此效率相对较低!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 在数组角标1处插入元素0</span></div><div class="line">scala&gt; arr.insert(1,0)</div><div class="line"></div><div class="line">scala&gt; println(arr)</div><div class="line">ArrayBuffer(1, 0, 2, 3, 4, 5)</div><div class="line"></div><div class="line"><span class="comment"># 在数组角标6处插入多个元素“6,7,8”</span></div><div class="line">scala&gt; arr.insert(6,6,7,8)</div><div class="line"></div><div class="line">scala&gt; println(arr)</div><div class="line">ArrayBuffer(1, 0, 2, 3, 4, 5, 6, 7, 8)      </div><div class="line"></div><div class="line"><span class="comment"># 移除数组角标1的元素</span></div><div class="line">scala&gt; arr.remove(1)</div><div class="line">res19: Int = 0</div><div class="line"></div><div class="line">scala&gt; println(arr)</div><div class="line">ArrayBuffer(1, 2, 3, 4, 5, 6, 7, 8)</div><div class="line"></div><div class="line"><span class="comment"># 移除数组角标5之后的三个元素</span></div><div class="line">scala&gt; arr.remove(5,3)</div><div class="line"></div><div class="line">scala&gt; println(arr)</div><div class="line">ArrayBuffer(1, 2, 3, 4, 5)</div></pre></td></tr></table></figure>
+<p>注: <em>上面的所有操作除<code>trimStart/trimEnd</code>操作位置索引是从1开始外，其他操作都是从0开始</em></p>
+<h3 id="定长数组与可变数组的相互转换"><a href="#定长数组与可变数组的相互转换" class="headerlink" title="定长数组与可变数组的相互转换"></a>定长数组与可变数组的相互转换</h3><p>有时想使用定长数组，但又不知道其长度。此时先定义一个可变长数组，然后在适当的时候将其转换成定长数组,反之也可以:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 将前面的ArrayBuffer转为Array</span></div><div class="line">scala&gt; arr.toArray</div><div class="line">res25: Array[Int] = Array(1, 2, 3, 4, 5)</div><div class="line"></div><div class="line">scala&gt; val z = Array(<span class="string">"jassassin"</span>,<span class="string">"eagle"</span>)</div><div class="line">z: Array[String] = Array(jassassin, eagle)</div><div class="line"></div><div class="line"><span class="comment"># 将前后的Array转为ArrayBuffer</span></div><div class="line">scala&gt; z.toBuffer</div><div class="line">res24: scala.collection.mutable.Buffer[String] = ArrayBuffer(jassassin, eagle)</div></pre></td></tr></table></figure>
+<h3 id="数组遍历"><a href="#数组遍历" class="headerlink" title="数组遍历"></a>数组遍历</h3><p>你可以通过<code>Int.until(n)</code>方法遍历角标<code>0-&gt;n-1</code>的方式来实现数组的遍历:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># i取值从0到arr.length-1</span></div><div class="line">scala&gt; <span class="keyword">for</span>(i &lt;- 0 until arr.length)&#123;<span class="built_in">print</span>(arr(i) + <span class="string">" "</span>)&#125;</div><div class="line">1 2 3 4 5</div><div class="line"><span class="comment"># 通过(0 until arr.length).reverse实现倒序遍历</span></div><div class="line">scala&gt; <span class="keyword">for</span>(i &lt;- (0 until arr.length).reverse)&#123;<span class="built_in">print</span>(arr(i) + <span class="string">" "</span>)&#125;</div><div class="line">5 4 3 2 1</div></pre></td></tr></table></figure>
+<p>也可以通过类似java中得增强for循环直接遍历数组中得元素:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="keyword">for</span>(i &lt;- arr)&#123;<span class="built_in">print</span>(i + <span class="string">" "</span>)&#125;</div><div class="line">1 2 3 4 5</div></pre></td></tr></table></figure></p>
+<h3 id="数组转换"><a href="#数组转换" class="headerlink" title="数组转换"></a>数组转换</h3><p>结合for推导，可以基于已有的数组方便的创建一个新的数组:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">scala&gt; val y = Array(1,2,3,4,5)</div><div class="line">y: Array[Int] = Array(1, 2, 3, 4, 5)</div><div class="line"></div><div class="line">scala&gt; val yy = <span class="keyword">for</span>(element &lt;- y <span class="keyword">if</span> element % 2 == 0)yield 2 * element</div><div class="line">yy: Array[Int] = Array(4, 8)</div></pre></td></tr></table></figure>
+<h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><p>数组提供了很多常用的方法来对其中的元素进行求和以及排序等:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">scala&gt; y.sum</div><div class="line">res33: Int = 15</div><div class="line"></div><div class="line">scala&gt; y.max</div><div class="line">res34: Int = 5</div><div class="line"></div><div class="line">scala&gt; y.min</div><div class="line">res35: Int = 1</div><div class="line"></div><div class="line"><span class="comment"># 通过scala.util.Sorting对数组o排序</span></div><div class="line">scala&gt; val o = Array(1,7,3,2,9)</div><div class="line">o: Array[Int] = Array(1, 7, 3, 2, 9)</div><div class="line"></div><div class="line">scala&gt; scala.util.Sorting.quickSort(o)</div><div class="line"></div><div class="line">scala&gt; <span class="keyword">for</span>(i &lt;- o)&#123;<span class="built_in">print</span>(i + <span class="string">" "</span>)&#125;</div><div class="line">1 2 3 7 9</div><div class="line"></div><div class="line"><span class="comment"># 以指定分隔符构建字符串的形式输出数组结果</span></div><div class="line">scala&gt; y.mkString(<span class="string">" and "</span>)</div><div class="line">res46: String = 1 and 2 and 3 and 4 and 5</div><div class="line"></div><div class="line"><span class="comment"># 更进一步指定输出的前后缀</span></div><div class="line">scala&gt; y.mkString(<span class="string">"&lt;"</span>,<span class="string">","</span>,<span class="string">"&gt; "</span>)</div><div class="line">res47: String = <span class="string">"&lt;1,2,3,4,5&gt; "</span></div></pre></td></tr></table></figure>
+<p>注: 对于上面的<code>min</code>,<code>max</code>,<code>quickSort</code>方法，数组的元素类型必须支持比较操作!</p>
+<h2 id="映射"><a href="#映射" class="headerlink" title="映射"></a>映射</h2><p>所谓映射即键值对集合！</p>
+<h3 id="创建映射"><a href="#创建映射" class="headerlink" title="创建映射"></a>创建映射</h3><p>你可以通过如下几种方式，创建一个映射:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 默认创建不可变Map</span></div><div class="line">scala&gt; val scores = Map(<span class="string">"jack"</span> -&gt; 99,<span class="string">"tony"</span> -&gt; 89,<span class="string">"rose"</span> -&gt; 88)</div><div class="line">scores: scala.collection.immutable.Map[String,Int] = Map(jack -&gt; 99, tony -&gt; 89, rose -&gt; 88)</div><div class="line"></div><div class="line"><span class="comment"># 这里尝试更新不可变Map scores中的值</span></div><div class="line">scala&gt; scores(<span class="string">"jack"</span>) = 100</div><div class="line">&lt;console&gt;:9: error: value update is not a member of scala.collection.immutable.Map[String,Int]</div><div class="line">              scores(<span class="string">"jack"</span>) = 100</div><div class="line">              ^</div><div class="line"></div><div class="line"><span class="comment"># 显示创建可变Map</span></div><div class="line">scala&gt; val scores2 = scala.collection.mutable.Map(<span class="string">"jack"</span> -&gt; 99,<span class="string">"tony"</span> -&gt; 89,<span class="string">"rose"</span> -&gt; 88)</div><div class="line">scores2: scala.collection.mutable.Map[String,Int] = Map(jack -&gt; 99, rose -&gt; 88, tony -&gt; 89)</div><div class="line"></div><div class="line"><span class="comment"># 创建一个空的可变Map</span></div><div class="line">scala&gt; val scores3 = new scala.collection.mutable.HashMap[String,Int]</div><div class="line">scores3: scala.collection.mutable.HashMap[String,Int] = Map()</div><div class="line"></div><div class="line"><span class="comment"># 初始化不可变Map的另外一种形式，不推荐!</span></div><div class="line">scala&gt; val scores4 = Map((<span class="string">"jack"</span>,99),(<span class="string">"tony"</span>,89),(<span class="string">"rose"</span>,88))</div><div class="line">scores4: scala.collection.immutable.Map[String,Int] = Map(jack -&gt; 99, tony -&gt; 89, rose -&gt; 88)</div></pre></td></tr></table></figure>
+<h3 id="获取映射中的值"><a href="#获取映射中的值" class="headerlink" title="获取映射中的值"></a>获取映射中的值</h3><p>你可以通过如下方式访问集合中某个键对应的值:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scala&gt; val jackScore = scores(<span class="string">"jack"</span>)</div><div class="line">jackScore: Int = 99</div></pre></td></tr></table></figure>
+<p>前面这种方式当映射中不包含查询的键时，将会抛出异常:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scala&gt; val noScore = scores(<span class="string">"eagle"</span>)</div><div class="line">java.util.NoSuchElementException: key not found: eagle</div><div class="line">	at scala.collection.MapLike<span class="variable">$class</span>.default(MapLike.scala:228)</div></pre></td></tr></table></figure>
+<p>为避免上面的问题，可以先进行判断:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 先判断</span></div><div class="line">scala&gt; val noScore = <span class="keyword">if</span>(scores.contains(<span class="string">"eagle"</span>)) scores(<span class="string">"eagle"</span>) <span class="keyword">else</span> 0</div><div class="line">noScore: Int = 0</div></pre></td></tr></table></figure></p>
+<p>简化方式,使用<code>getOrElse</code>方法:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scala&gt; val noScore2 = scores.getOrElse(<span class="string">"eagle"</span>,0)</div><div class="line">noScore2: Int = 0</div></pre></td></tr></table></figure></p>
+<h3 id="更新映射中的值"><a href="#更新映射中的值" class="headerlink" title="更新映射中的值"></a>更新映射中的值</h3><p>可以通过下面的方式更新或添加某个<code>可变映射</code>的值。示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 定义可变Map</span></div><div class="line">scala&gt; val name_age =new scala.collection.mutable.HashMap[String,Int]</div><div class="line">name_age: scala.collection.mutable.HashMap[String,Int] = Map()</div><div class="line"></div><div class="line"><span class="comment"># 添加键值对</span></div><div class="line">scala&gt; name_age += (<span class="string">"jack"</span> -&gt; 20,<span class="string">"tony"</span> -&gt; 30)</div><div class="line">res1: name_age.type = Map(jack -&gt; 20, tony -&gt; 30)</div><div class="line"></div><div class="line"><span class="comment"># 更新某个键值</span></div><div class="line">scala&gt; name_age(<span class="string">"jack"</span>) = 25</div><div class="line"></div><div class="line">scala&gt; <span class="built_in">print</span>(name_age)</div><div class="line">Map(jack -&gt; 25, tony -&gt; 30)</div><div class="line"></div><div class="line"><span class="comment"># 删除某个键</span></div><div class="line">scala&gt; name_age -= <span class="string">"tony"</span></div><div class="line">res5: name_age.type = Map(jack -&gt; 25)</div></pre></td></tr></table></figure>
+<p>虽然不可变映射不能改变其值，但是可以基于该不可变映射创建一个新的映射:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 这是前面定义的不可变scores</span></div><div class="line">scala&gt; <span class="built_in">print</span>(scores)</div><div class="line">Map(jack -&gt; 99, tony -&gt; 89, rose -&gt; 88)</div><div class="line"></div><div class="line"><span class="comment"># 基于scores创建一个新的Map，同时更新了"jack"的值，并追加了键值对("eagle" -&gt; 99)</span></div><div class="line">scala&gt; val newScores = scores + (<span class="string">"jack"</span> -&gt; 100,<span class="string">"eagle"</span> -&gt; 99)</div><div class="line">newScores: scala.collection.immutable.Map[String,Int]</div><div class="line">			= Map(jack -&gt; 100, tony -&gt; 89, rose -&gt; 88, eagle -&gt; 99)</div><div class="line"></div><div class="line"><span class="comment"># 通过"-"，删除不可变映射中的某个元素创建一个新的映射</span></div><div class="line">scala&gt; val newScores2 = newScores - <span class="string">"eagle"</span></div><div class="line">newScores2: scala.collection.immutable.Map[String,Int] = Map(jack -&gt; 100, tony -&gt; 89, rose -&gt; 88)</div></pre></td></tr></table></figure></p>
+<h3 id="迭代映射"><a href="#迭代映射" class="headerlink" title="迭代映射"></a>迭代映射</h3><p>遍历所有kv:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="keyword">for</span>((k,v) &lt;- scores)&#123;println(k + <span class="string">"-&gt;"</span> + v)&#125;</div><div class="line">jack-&gt;99</div><div class="line">tony-&gt;89</div><div class="line">rose-&gt;88</div></pre></td></tr></table></figure></p>
+<p>遍历所有key:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 取出映射的keySet集合</span></div><div class="line">scala&gt; <span class="keyword">for</span>(key &lt;- scores.keySet)&#123;println(key)&#125;</div><div class="line">jack</div><div class="line">tony</div><div class="line">rose</div></pre></td></tr></table></figure></p>
+<p>遍历所有value:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="keyword">for</span>(value &lt;- scores.values) println(value)</div><div class="line">99</div><div class="line">89</div><div class="line">88</div></pre></td></tr></table></figure>
+<p>反转映射的k-&gt;v:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">scala&gt; val invertScores = <span class="keyword">for</span>((k,v) &lt;- scores) yield (v,k)</div><div class="line">invertScores: scala.collection.immutable.Map[Int,String] = Map(99 -&gt; jack, 89 -&gt; tony, 88 -&gt; rose)</div><div class="line"></div><div class="line">scala&gt; println(invertScores)</div><div class="line">Map(99 -&gt; jack, 89 -&gt; tony, 88 -&gt; rose)</div></pre></td></tr></table></figure>
+<h2 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h2><p>元组可以用来包含不同元素类型的数据，因此其可以用于函数需要返回不止一个值的情况!元组的定义比较简单，访问元组指定位置的元素可以通过<code>tuple._index</code>来访问!示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 定义一个元组t</span></div><div class="line">scala&gt; val t = (1,3.14,<span class="string">"hello"</span>)</div><div class="line">t: (Int, Double, String) = (1,3.14,hello)</div><div class="line"></div><div class="line"><span class="comment"># 访问元组中的位置1上的元素</span></div><div class="line">scala&gt; println(t._1)</div><div class="line">1</div></pre></td></tr></table></figure>
+<p>注:<em>元组中的元素角标索引是从1开始而不是0!</em></p>
+<h3 id="拉链操作"><a href="#拉链操作" class="headerlink" title="拉链操作"></a>拉链操作</h3><p>使用元组的原因之一就是可以将多个值绑在一起，以便它们可以一起处理。通过<code>zip</code>方法可以很方便的实现将两个数组进行绑定:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">scala&gt; val symbols = Array(<span class="string">"&lt;"</span>,<span class="string">"-"</span>,<span class="string">"&gt;"</span>)</div><div class="line">symbols: Array[String] = Array(&lt;, -, &gt;)</div><div class="line"></div><div class="line">scala&gt; val counts = Array(1,2,3)</div><div class="line">counts: Array[Int] = Array(1, 2, 3)</div><div class="line"></div><div class="line">scala&gt; val pairs = symbols.zip(counts)</div><div class="line">pairs: Array[(String, Int)] = Array((&lt;,1), (-,2), (&gt;,3))</div></pre></td></tr></table></figure></p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+			
+		
+	
+		
+			
+		
+	
+		
+	
+		
+			
+			
+		
+	
+		
+			
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev"><a href="/2015/08/05/scala/scala/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2015/04/24/scala/scala-funcation/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 Jassassin
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+</body>
+</html>
