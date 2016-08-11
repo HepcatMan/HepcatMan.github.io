@@ -1,4 +1,4 @@
-title: Shell
+title: shell
 date: 2015-11-06 11:08:51
 categories: Linux
 toc: true
@@ -14,7 +14,7 @@ toc: true
 ```bash
 #!/bin/bash
 
-for skill in Ada Coffe Action Java 
+for skill in Ada Coffe Action Java
 do
     echo "I am good at ${skill}Script"
 done
@@ -44,7 +44,7 @@ variable.sh: 18: variable.sh: ro: is read only
 
 ### 特殊变量 ###
 
-|	变量	|    含义    | 
+|	变量	|    含义    |
 |    :------ 	|   :------  |   
 |	$0	|	当前脚本的文件名    |
 |	$n	|	传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。|
@@ -83,7 +83,7 @@ $* = 1 2 3
 (1) 命令替换: 是指Shell可以先执行命令，将输出结果暂时保存，在适当的地方输出。
 (2) 变量替换: 可以根据变量的状态（是否为空、是否定义等）来改变它的值
 
-|	形式	|    说明    | 
+|	形式	|    说明    |
 |    :------ 	|   :------  |   
 |	${var}	|	变量本来的值   |
 |	${var:-word}	|	如果变量 var 为空或已被删除(unset)，那么返回 word，但不改变 var 的值。|
@@ -107,10 +107,10 @@ echo "Undefined p3 for \${p3:+50} = ${val}, p3 = ${p3}"
 
 ----------------- 输出-----------------
 current date: 2015年 11月 06日 星期五 15:14:32 CST
-Undefined p1 for ${p1:-20} = 20, p1 = 
+Undefined p1 for ${p1:-20} = 20, p1 =
 Undefined p2 for ${p2:=30} = 30, p2 = 30
 defined num for ${num:+40} = 40, num = 30
-Undefined p3 for ${p3:+50} = , p3 = 
+Undefined p3 for ${p3:+50} = , p3 =
 
 ```
 
@@ -149,7 +149,7 @@ b=2
 c=1
 
 # -eq	检测两个数是否相等，相等返回 true。
-if [ $a -eq $b ] 
+if [ $a -eq $b ]
 then
 	echo "${a} == ${b}"
 else
@@ -157,7 +157,7 @@ else
 fi
 
 # -ne	检测两个数是否相等，不相等返回 true。
-if [ $a -ne $b ] 
+if [ $a -ne $b ]
 then
 	echo "${a} != ${b}"
 else
@@ -165,7 +165,7 @@ else
 fi
 
 # -gt	检测左边的数是否大于右边的，如果是，则返回 true。
-if [ $b -gt $a ] 
+if [ $b -gt $a ]
 then
 	echo "${b} > ${a}"
 else
@@ -173,7 +173,7 @@ else
 fi
 
 # -ge	检测左边的数是否大等于右边的，如果是，则返回 true。
-if [ $c -ge $a ] 
+if [ $c -ge $a ]
 then
 	echo "${c} >= ${a}"
 else
@@ -181,7 +181,7 @@ else
 fi
 
 # -lt	检测左边的数是否小于右边的，如果是，则返回 true。
-if [ $b -lt $a ] 
+if [ $b -lt $a ]
 then
 	echo "${b} < ${a}"
 else
@@ -189,7 +189,7 @@ else
 fi
 
 # -le	检测左边的数是否小于等于右边的，如果是，则返回 true
-if [ $c -lt $a ] 
+if [ $c -lt $a ]
 then
 	echo "${c} <= ${a}"
 else
@@ -208,7 +208,7 @@ fi
 
 ### 布尔运算符 ###
 
-`!`非,`-a`与,`-o`或 
+`!`非,`-a`与,`-o`或
 ```bash
 d=0
 
@@ -233,19 +233,19 @@ msg2="world"
 msg3="world"
 msg4=""
 
-# =	检测两个字符串是否相等，相等返回 true。	
+# =	检测两个字符串是否相等，相等返回 true。
 if [ ${msg1} = ${msg2} ]; then
 	echo "${msg1} = ${msg2}"
 else
 	echo "${msg1} != ${msg2}"
 fi
 
-# -z	检测字符串长度是否为0，为0返回 true。	
+# -z	检测字符串长度是否为0，为0返回 true。
 if [ -z ${msg4} ]; then
 	echo "msg4's length is 0!"
 fi
 
-# -n	检测字符串长度是否为0，不为0返回 true。	
+# -n	检测字符串长度是否为0，不为0返回 true。
 if [ -n ${msg3} ]; then
 	echo "${msg3} is not null!"
 fi
@@ -277,7 +277,7 @@ fi
 a=${a:-0}
 if [ $a -eq 0 ]; then
 	echo "\$a is null!"
-fi 
+fi
 
 ----------------- 输出 -----------------
 Undefined a length is 0!
@@ -295,35 +295,35 @@ file="/home/eagle/myspace/exercise/shell/demo.sh"
 
 # -e file 检测文件（包括目录）是否存在，如果是，则返回 true。
 if [ -e $file ]; then
-	
+
 	echo "$file exists!"
 
 	# -d file 检测文件是否是目录，如果是，则返回 true。
 	if [ -d $file ];then
-	
+
 		echo "$file is directory!"
-	
+
 	# -f file 检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true。
 	elif [ -f $file ]; then
-	
+
 		echo "$file is file!"
 
 		# -s file 检测文件是否为空（文件大小是否大于0），不为空返回 true。
 		if [ -s $file ]; then
-			
+
 			echo "$file is not null!"
 
 			# -r file 检测文件是否可读，如果是，则返回 true。
 			if [ -r $file ]; then
-				
+
 				echo "$file can be read!"
-			
+
 			fi
-		
+
 		fi
-	
+
 	fi
-	 	
+
 else
 	echo "$file not exists!"
 fi
@@ -424,11 +424,11 @@ printf "%d %s \n" $n1 $s1 $n2  $s2
 printf "%d %s \n"
 
 # 格式只指定了一个参数，但多出的参数仍然会按照该格式输出
-printf "%s" a b c 
+printf "%s" a b c
 
 -----------------输出-----------------
-1 a 
-2 b 
+1 a
+2 b
 0
 
 ```
@@ -482,7 +482,7 @@ do
 	case $number in
 		1|2|3|4|5)
 			echo "valid number:${number}"
-			break 
+			break
 			;;
 	esac
 
@@ -517,16 +517,16 @@ $ find . -name "*.md"
 # 同上，只是iname不区分字母大小写
 $ find . -iname "*.md"
 # 查询以".md"或".sh"结尾的文件
-$ find . \( -name "*.md" -o  -name "*.sh" \) 
+$ find . \( -name "*.md" -o  -name "*.sh" \)
 # 查询非".md"结尾的文件
-$ find . ！-name "*.md" 
+$ find . ！-name "*.md"
 ```
 * -maxdepth 指定最大深度，find默认会查询当前目录以及所有子目录。
 * -mindepth 指定最小深度
 
 ```bash
 # 只查询当前目录，注意如果-type在-maxdepth之前，则linux会先查找所有文件然后再过滤最大深度
-$ find . -maxdepth 1 -name "*.sh" -type f 
+$ find . -maxdepth 1 -name "*.sh" -type f
 $ find . -mindepth 2 -name "*.sh" -type f
 ```
 * 根据文件相关时间进行搜索:-atime,-ctime,-mtime单位:天，-amin,-cmin,-min单位:分钟
@@ -569,7 +569,7 @@ $ find . -type f -name "*.md" -exec cp {} bak \;
 $ cat shell.md | xargs
 # 通过下面的命令可以将单行输入通过" "分隔，指定每行参数个数
 $ cat shell.md | xargs -n 3
-# -d 指定自定义分隔符 
+# -d 指定自定义分隔符
 $ echo "helloworldhelloworld" | xargs -d o -n 1
 ```
 
@@ -609,7 +609,7 @@ $ echo "WHO 3 4    ARE    YOU" | tr -s ' '
 ### sort和uniq ###
 
 ```bash
-$ cat a.dat 
+$ cat a.dat
 jack 78
 rose 79
 tony 79
@@ -628,7 +628,7 @@ rose 79
 jack 78
 
 # 按照第二列排序
-$ sort -k 2 a.dat 
+$ sort -k 2 a.dat
 jack 78
 rose 79
 rose 79
@@ -654,12 +654,12 @@ rose 79
 $ ll a.dat
 -rw-r--r-- 1 eagle eagle 32 11月 10 13:51 a.dat
 
-# 将a.dat按照单个文件10byte拆分 
-$ split -b 10 a.dat 
+# 将a.dat按照单个文件10byte拆分
+$ split -b 10 a.dat
 -rw-r--r-- 1 eagle eagle   10 11月 10 14:32 xaa
 -rw-r--r-- 1 eagle eagle   10 11月 10 14:32 xab
 -rw-r--r-- 1 eagle eagle   10 11月 10 14:32 xac
--rw-r--r-- 1 eagle eagle    2 11月 10 14:32 xad 
+-rw-r--r-- 1 eagle eagle    2 11月 10 14:32 xad
 
 # -d 分割后的文件名以数字为后缀 -a 后缀长度 a_自定义前缀
 $ split -b 10 a.dat -d -a 4 a
@@ -683,7 +683,7 @@ file_name_subfix=${file_name#*.}
 ### 生成指定大小的文件 ###
 
 ```bash
-# if文件输入(input file), of(output file),bs文件大小(字节), count bs大小倍数 
+# if文件输入(input file), of(output file),bs文件大小(字节), count bs大小倍数
 $  dd if=/dev/zero of=junk.data bs=10M count=1
 1+0 records in
 1+0 records out
@@ -694,7 +694,7 @@ $  dd if=/dev/zero of=junk.data bs=10M count=1
 
 `comm`,参与比较的两个文件必须事先已被排过序!
 ```bash
-$ cat a.dat 
+$ cat a.dat
 s
 t
 q
@@ -702,7 +702,7 @@ c
 g
 t
 o
-$ cat b.dat 
+$ cat b.dat
 g
 g
 r
@@ -714,7 +714,7 @@ o
 # 文件排序
 $ sort a.dat -o a.dat; sort b.dat -o b.dat
 
-# 比较结果: 只在a.dat出现的字符	只在b.dat出现的字符	两个文件交集	
+# 比较结果: 只在a.dat出现的字符	只在b.dat出现的字符	两个文件交集
 $ comm a.dat b.dat
 		c
 		g
@@ -763,11 +763,11 @@ $ wc demo.sh -L
 
 ### grep ###
 ```bash
-$ grep ".jpg" demo.sh 
+$ grep ".jpg" demo.sh
 file_name=some.jpg'
 
 # 反向
-$ grep -v ".jpg" demo.sh 
+$ grep -v ".jpg" demo.sh
 #!/bin/bash
 
 file_name_prefix=${file_name%.*}
@@ -778,10 +778,10 @@ echo filename prefix:${file_name_prefix}
 echo filename subfix:${file_name_subfix}
 
 # 包含搜索关键词的行数
-$ grep -c "file" demo.sh 
+$ grep -c "file" demo.sh
 6
 
-$ grep -n "file" demo.sh 
+$ grep -n "file" demo.sh
 3:file_name=some.jpg
 5:file_name_prefix=${file_name%.*}
 6:file_name_subfix=${file_name#*.}
@@ -794,7 +794,7 @@ $ grep -n "file" demo.sh
 * 递归搜索
 
 ```bash
-$ grep "file" . -R -n 
+$ grep "file" . -R -n
 ./shell/demo.sh:3:file_name=some.jpg
 ./shell/demo.sh:5:file_name_prefix=${file_name%.*}
 ./shell/demo.sh:6:file_name_subfix=${file_name#*.}
@@ -804,7 +804,7 @@ $ grep "file" . -R -n
 
 
 # 多个匹配模式 -e
-$ grep -e "prefix" -e "subfix" . -R -n 
+$ grep -e "prefix" -e "subfix" . -R -n
 ./shell/demo.sh:5:file_name_prefix=${file_name%.*}
 ./shell/demo.sh:6:file_name_subfix=${file_name#*.}
 ./shell/demo.sh:9:echo filename prefix:${file_name_prefix}
@@ -854,21 +854,21 @@ echo filename subfix:${file_name_subfix}
 
 ### cut ###
 ```bash
-$ cat a.dat 
+$ cat a.dat
 NO	NAME	SCORE
 1	jack	100
 2	tony	99
 3	spark	90
 
 # cut默认以\t分隔，-f2,3 第二、三列
-$ cut -f2,3 a.dat 
+$ cut -f2,3 a.dat
 NAME	SCORE
 jack	100
 tony	99
 spark	90
 
 # 打印前5个字符
-$ cut -c1-5 a.dat 
+$ cut -c1-5 a.dat
 NO	NA
 1	jac
 2	ton
@@ -877,7 +877,7 @@ NO	NA
 
 ### sed ###
 ```bash
-$ cat a.dat 
+$ cat a.dat
 NO	NAME	SCORE
 1	jack	100
 2	tony	99
@@ -892,7 +892,7 @@ NO	NAME	SCORE
 
 # 加上-i选项，同时改变原始文件
 $ sed -i 's/90/91/g' a.dat
-$ cat a.dat 
+$ cat a.dat
 NO	NAME	SCORE
 1	jack	100
 2	tony	99
@@ -900,13 +900,13 @@ NO	NAME	SCORE
 
 # 3g 从第三次匹配开始替换
 $ sed -i 's/91/911/3g' a.dat
-$ cat a.dat 
+$ cat a.dat
 NO	NAME	SCORE
 1	jack	100
 2	tony	99
 3	spark	91
 
-$ cat a.dat 
+$ cat a.dat
 NO	NAME	SCORE
 1	jack	100
 2	tony	99
@@ -915,7 +915,7 @@ NO	NAME	SCORE
 4	java	98
 
 # 移除匹配的空白行
-$ sed  '/^$/d' a.dat 
+$ sed  '/^$/d' a.dat
 NO	NAME	SCORE
 1	jack	100
 2	tony	99
@@ -946,7 +946,7 @@ line no:2,No of fields:3, $0=line2 f4 f5, $1=line2, $2=f4
 line no:3,No of fields:3, $0=line3 f6 f7, $1=line3, $2=f6
 
 # 统计文件行数
-$ awk 'END{print NR}' ./demo.sh 
+$ awk 'END{print NR}' ./demo.sh
 10
 ```
 
@@ -954,13 +954,13 @@ $ awk 'END{print NR}' ./demo.sh
 
 ```bash
 # 输出行号小于5的行
-$ awk 'NR < 5' ./demo.sh 
+$ awk 'NR < 5' ./demo.sh
 
 # 输出第一到第4行
 $ awk 'NR==1,NR==4' ./demo.sh
 
 # 包含关键词"file_name"的行
-$ awk '/file_name/' ./demo.sh 
+$ awk '/file_name/' ./demo.sh
 
 # 迭代文件每行
 $ cat demo.sh | (while read line; do echo $line ; done)
@@ -968,7 +968,7 @@ $ cat demo.sh | (while read line; do echo $line ; done)
 遍历一行数据的每个单词
 
 ```bash
-#!/bin/bash 
+#!/bin/bash
 
 line="hello shell"
 
@@ -986,12 +986,12 @@ done
 line="hello shell"
 
 for((i=0; i<${#line}; i++))
-do 
+do
 	echo ${line:i:1}
 done
 ```
 
---- 
+---
 
 参考:
-- [Linux Shell脚本教程：30分钟玩转Shell脚本编程](http://c.biancheng.net/cpp/shell/) 
+- [Linux Shell脚本教程：30分钟玩转Shell脚本编程](http://c.biancheng.net/cpp/shell/)

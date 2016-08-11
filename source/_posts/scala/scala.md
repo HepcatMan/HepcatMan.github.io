@@ -1,4 +1,4 @@
-title: 入门
+title: intro
 date: 2015-08-05 21:17:16
 categories: Scala
 toc: true
@@ -52,7 +52,7 @@ msg: String = hello world
 与Java一样，Scala也有7种数值类型Byte、Char、Short、Int、Long、Float和Double，以及一个Boolean类型。Scala并不刻意区分基本类型与引用类型，你可以直接对数字执行方法。而scala编译器会自动对基本类型和引用类型进行转换，如:
 ```bash
 //直接对1调用toString方法.
-scala> 1.toString 
+scala> 1.toString
 res5: String = 1
 ```
 注:如果方法不带有参数且不会改变方法调用者，则调用方法时可以不带`()`

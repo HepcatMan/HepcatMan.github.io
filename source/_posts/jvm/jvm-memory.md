@@ -1,4 +1,4 @@
-title: <<深入Java虚拟机>>之Java内存区域
+title: memory
 date: 2014-06-02 23:45:12
 categories: JVM
 toc: true
@@ -54,5 +54,3 @@ JDK1.4中出现了NIO，其引入了一种基于通道(Channel)与缓冲区(Buff
 ----
 
 参考 [深入Java虚拟机](http://item.jd.com/11252778.html)/chapter02 Java内存区域与内存溢出异常
-
-

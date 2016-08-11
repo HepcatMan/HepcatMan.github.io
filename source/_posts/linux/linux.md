@@ -1,4 +1,4 @@
-title: 常用操作
+title:  daily-use program
 date: 2015-08-05 18:42:15
 categories: Linux
 toc: true
@@ -13,7 +13,7 @@ wget --header="MyHeader: head_value" http://domain.com/path/page/need_header.php
 3. 伪装成浏览器  
 有些网站，例如facebook，会检测请求方式是否是浏览器，如果不是正常的浏览器，那么会redirect到一个"incompatible browser"的错误页面。
 这时候需要wget伪装成一个浏览器（我是Mozilla Firefox！）：  
-wget --user-agent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 (.NET CLR 3.5.30729)" 
+wget --user-agent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 (.NET CLR 3.5.30729)"
 	http://domain.com/path/page/check_user_agent.php  
 4. post数据到某个页面  
 wget不光可以用get方式请求网页，还可以post data的，那样就可以实现自动注册、自动登录了（有验证码的页面除外。。。。）  
@@ -209,7 +209,7 @@ $ du -ch LICENSE pom.xml
 
 ```bash
 # du -a:指定所有目录和文件 -k:KB
-# sort -n:按数字排 -r:倒序 -k:按第n列排序 
+# sort -n:按数字排 -r:倒序 -k:按第n列排序
 $ du -ak ./* | sort -nrk 1 | head
 10128	./flume-ng-sinks
 6488	./flume-ng-sinks/flume-ng-morphline-solr-sink

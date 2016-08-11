@@ -1,4 +1,4 @@
-title: 对象
+title: object
 date: 2015-08-05 21:26:57
 categories: Scala
 toc: true
@@ -13,11 +13,11 @@ Scala中类的定义比较简单:class不需要`public`修饰，同一个源文�
 class Counter {
 
   private var value = 0
-  
+
   def increment() {
     value += 1
   }
-  
+
   def current() = value
 }
 ```
@@ -25,12 +25,12 @@ class Counter {
 调用:scala中对于不含参数的方法，则可以省略后面的括号。一般建议取值操作建议去掉空格!
 ```scala
 object Demo{
-  
+
   def main(args: Array[String]): Unit = {
     var obj1 = new Counter
      obj1.increment
      println(obj1.current)
-     
+
 //   var obj1 = new Counter()
 //   obj1.increment()
 //   println(obj1.current())
@@ -69,18 +69,18 @@ scala中如果字段是私有的，则生成的getter/setter方法也是私有�
 class Person{
 	//生成私有getter/setter
 	private var privateAge = 10
-	
+
 	//val修饰的只生成getter
 	val name = "eagle"
 
 	//不生成getter/setter
-       private[this] var sex = "man" 
-	
+       private[this] var sex = "man"
+
 	//自定义get/set
 	def age = privateAge
 
 	def setAge(newVal: Int){
-		privateAge = newVal	
+		privateAge = newVal
 	}
 }
 ```
@@ -93,7 +93,7 @@ public class Person {
   private final java.lang.String name;
   //未生成任何get/set方法
   private java.lang.String sex;
-  
+
   //private
   private int privateAge();
   private void privateAge_$eq(int);
@@ -130,7 +130,7 @@ public class Person {
 
   public java.lang.String name();
   public void name_$eq(java.lang.String);
-	
+
   //@BeanProperty生成的符合规范的getter/setter方法
   public void setName(java.lang.String);
   public java.lang.String getName();
@@ -234,7 +234,7 @@ public class com.jassassin.scala.chaptor567.Person extends java.lang.Object{
 
 ```scala
 class Person private(var name: String,val age: Int){
-	 
+
 }
 ```
 
@@ -246,7 +246,7 @@ public class Person {
   public java.lang.String name();
   public void name_$eq(java.lang.String);
   public int age();
-  
+
   //注意私有构造方法
   private Person(java.lang.String, int);
 }
@@ -259,18 +259,18 @@ public class Person {
 
 ```scala
 class Person {
-	private var name = "eagle" 
+	private var name = "eagle"
 	private var age = 20
 
 	def this(name: String){
 		this()
-		this.name = name	
+		this.name = name
 	}
 
 	def this(name: String,age: Int){
 		this(name)
-		this.age = age	
-	}	
+		this.age = age
+	}
 }
 ```
 ```java
@@ -303,19 +303,19 @@ import scala.collection.mutable.ArrayBuffer
  * 嵌套类
  */
 class Company(var name: String) {
-    
+
     /**
      * 公司部门
      */
     class Department(var name: String){
       val members = new ArrayBuffer[String]
-    } 
-    
+    }
+
     /**
      * 公司所有部门
      */
     private val departments = new ArrayBuffer[Department]
-    
+
     /**
      * 为该公司添加部门
      */
@@ -326,23 +326,23 @@ class Company(var name: String) {
 }
 
 object Company{
-  
+
   def main(args: Array[String]): Unit = {
       val networkbench = new Company("networkbench")
       val embracesource = new Company("embracesource")
-      
+
       val dev1 = new networkbench.Department("dev1")
       val dev12 = new networkbench.Department("dev12")
-      
+
       val ops = new embracesource.Department("ops")
-      
+
       networkbench.join(dev1)
       networkbench.join(dev12)
-       
+
        //注意这里添加了一个属于embracesource的部门
       networkbench.join(ops)
   }
-  
+
 }
 ```
 `scalac Company.scala`编译,错误提示:
@@ -361,19 +361,19 @@ one error found
 如果想产生类似java中的内部类特性,则可以将Department移至Company的外部.或者可以使用`类型投影 Company#Department`即"任何Company的Department"!
 ```scala
 class Company(var name: String) {
-    
+
     /**
      * 公司部门
      */
     class Department(var name: String){
       val members = new ArrayBuffer[String]
-    } 
-    
+    }
+
     /**
      * 公司所有部门
      */
     private val departments = new ArrayBuffer[Company#Department]
-    
+
     /**
      * 为该公司添加部门
      */
@@ -402,9 +402,9 @@ object Object {
  * object 类型
  */
 object Accounts{
-  
+
   private var lastNumber = 0;
-  
+
   /**
    * 用于产生一个唯一number
    */
@@ -412,7 +412,7 @@ object Accounts{
     lastNumber += 1
     lastNumber
   }
-  
+
 }
 ```
 示例中的`Accounts`,只会在该类第一次使用时被初始化一次也就是说如果该类从未被使用，则其构造器也不会被执行。对于任何你在Java或C++中会使用单例对象的地方，在Scala中都可以用对象来实现(但不能提供构造器参数):
@@ -421,16 +421,16 @@ object Accounts{
 - 需要用单个实例来协调某个服务时
 
 ### 伴生对象 ###
-在Java或C++中，通常会用到既有实例方法又有静态方法的类。在Scala中，你可以通过类和与类同名的"伴生"对象来达到同样的目的。 
+在Java或C++中，通常会用到既有实例方法又有静态方法的类。在Scala中，你可以通过类和与类同名的"伴生"对象来达到同样的目的。
 ```java
 /**
  * object 类型
  * Accounts类的伴生对象
  */
 object Accounts{
-  
+
   private var lastNumber = 0;
-  
+
   /**
    * 用于产生一个唯一number
    */
@@ -438,20 +438,20 @@ object Accounts{
     lastNumber += 1
     lastNumber
   }
-  
+
 }
 
 class Accounts{
-  
+
   //这里访问伴生对象的私有方法
   val id = Accounts.newUniqueNumber()
-  
+
   private var balance = 0.0
-  
+
   def deposit(amount: Double) {
     balance += amount
   }
-  
+
 }
 ```
 当类和它的伴生对象在同个文件中时，类可以访问伴生对象的私有特性(虽有可以访问但是并不包含在类的作用域中，因此需要添加Accounts前缀)。

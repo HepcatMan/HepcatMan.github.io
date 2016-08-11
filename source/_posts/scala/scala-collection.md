@@ -1,11 +1,11 @@
-title: 数组&集合
+title: arry&collection
 date: 2015-04-25 21:24:42
 categories: Scala
 toc: true
 ---
 本文主要记录Scala中的数组(定长数组与可变长数组)定义以及常用操作,同时将映射(类似java中的集合类)以及元组也放在了这里!
 ## 数组 ##
-### 定长数组 ### 
+### 定长数组 ###
 在JVM中，Scala的Array以Java数组的方式实现。Int、Double或其他与Java中基本类型对应的数组都是基本类型数组。比如Array("a","b","c")在JVM中就是一个String[]。下面是使用Scala中得Array实现的长度不变的数组:
 
 ```bash
@@ -29,7 +29,7 @@ java.lang.ArrayIndexOutOfBoundsException: 2
 # 注意数组中的值的访问形式是通过"()"，而不是"[]"
 scala> s(1) = "bye"
 ```
-注: * 数组元素的访问方式是`s(1)`而不是`s[1]`*	
+注: * 数组元素的访问方式是`s(1)`而不是`s[1]`*
 
 ### 可变长数组ArrayBuffer ###
 Scala中使用ArrayBuffer,实现类似java中得ArrayList可变长数组。下面的示例是我在terminal中测试的
@@ -74,10 +74,10 @@ import scala.collection.mutable.ArrayBuffer
 
 /**
   @autor jassassin
-  @description Scala数组 
+  @description Scala数组
 */
 object Demo{
-    
+
 	def main(args: Array[String]): Unit = {
 
 		//定义可变长的Int数组ArrayBuffer
@@ -110,10 +110,10 @@ object Demo{
 
 RUN: scala Demo.scala
 ----------------------------输出--------------------------------
-arr:1 1 2 3 4 5 1 2 3 4 5 
+arr:1 1 2 3 4 5 1 2 3 4 5
 
 -------trimEnd(3)------------
-arr:1 1 2 3 4 5 1 2 
+arr:1 1 2 3 4 5 1 2
 ```
 
 对于ArrayBuffer，如果在数组中间插入元素由于需要将插入位置之后的所有后移，因此效率相对较低!
@@ -168,15 +168,15 @@ res24: scala.collection.mutable.Buffer[String] = ArrayBuffer(jassassin, eagle)
 ```bash
 # i取值从0到arr.length-1
 scala> for(i <- 0 until arr.length){print(arr(i) + " ")}
-1 2 3 4 5 
+1 2 3 4 5
 # 通过(0 until arr.length).reverse实现倒序遍历
 scala> for(i <- (0 until arr.length).reverse){print(arr(i) + " ")}
-5 4 3 2 1 
+5 4 3 2 1
 ```
 也可以通过类似java中得增强for循环直接遍历数组中得元素:
 ```bash
 scala> for(i <- arr){print(i + " ")}
-1 2 3 4 5 
+1 2 3 4 5
 ```
 ### 数组转换 ###
 结合for推导，可以基于已有的数组方便的创建一个新的数组:
@@ -208,7 +208,7 @@ o: Array[Int] = Array(1, 7, 3, 2, 9)
 scala> scala.util.Sorting.quickSort(o)
 
 scala> for(i <- o){print(i + " ")}
-1 2 3 7 9 
+1 2 3 7 9
 
 # 以指定分隔符构建字符串的形式输出数组结果
 scala> y.mkString(" and ")
@@ -303,7 +303,7 @@ Map(jack -> 99, tony -> 89, rose -> 88)
 
 # 基于scores创建一个新的Map，同时更新了"jack"的值，并追加了键值对("eagle" -> 99)
 scala> val newScores = scores + ("jack" -> 100,"eagle" -> 99)
-newScores: scala.collection.immutable.Map[String,Int] 
+newScores: scala.collection.immutable.Map[String,Int]
 			= Map(jack -> 100, tony -> 89, rose -> 88, eagle -> 99)
 
 # 通过"-"，删除不可变映射中的某个元素创建一个新的映射

@@ -1,4 +1,4 @@
-title: <<深入Java虚拟机>>之垃圾收集器
+title: garbage collector
 date: 2014-06-10 15:13:36
 categories: JVM
 toc: true

@@ -1,4 +1,4 @@
-title: Curator典型应用场景
+title: curator apply
 date: 2015-12-14 14:40:44
 categories: ZooKeeper
 toc: true
@@ -12,7 +12,7 @@ zookeeper原生支持通过注册Watcher来进行事件监听,但是其使用比
 
 ```java
 public class Main {
-	
+
 	/**
 	 * 初始sleep时间(毫秒)
 	 */
@@ -25,12 +25,12 @@ public class Main {
 	 * 最大sleep时间
 	 */
 	private static final int MAX_SLEEP_TIME = 60000;
-	
+
 	private static final String CONNECT_STRING = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
 	private static final int SESSION_TIMEOUT = 5000;
 	private static final int CONNECTION_TIMEOUT = 5000;
-	
-	
+
+
 	public static void main(String[] args) throws Exception {
 		CuratorFramework client = initClient();
 		watchDataChanged(client);
@@ -43,7 +43,7 @@ public class Main {
 	private static CuratorFramework initClient() {
 		//1.设置重试策略,重试时间计算策略sleepMs = baseSleepTimeMs * Math.max(1, random.nextInt(1 << (retryCount + 1)));
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(BASE_SLEEP_TIME, MAX_RETRIES_COUNT, MAX_SLEEP_TIME);
-		
+
 		//2.使用Fluent风格初始化客户端
 		CuratorFramework client = CuratorFrameworkFactory.builder()
 									.connectString(CONNECT_STRING)
@@ -55,35 +55,35 @@ public class Main {
 		client.start();
 		return client;
 	}
-	
+
 	/**
 	 * 监听节点数据变化
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	private static void watchDataChanged(CuratorFramework client) throws Exception{
 		//1.创建目标监听节点
 		String path = client.create().creatingParentsIfNeeded().forPath("/node1", "eagle".getBytes());
 		System.out.println("success create path:" + path);
-		
+
 		//2.添加监听器
 		final NodeCache nodeCache = new NodeCache(client, path);
 		nodeCache.getListenable().addListener(new NodeCacheListener() {
-			
+
 			@Override
 			public void nodeChanged() throws Exception {
 				System.out.println("node data changed, new data:" + new String(nodeCache.getCurrentData().getData()));
 			}
 		});
 		nodeCache.start(true);
-		
+
 		//3.更新数据
 		client.setData().forPath(path, "eagle_update".getBytes());
 		Thread.sleep(1000);
-		
+
 		//4.再次更新
 		client.setData().forPath(path, "eagle_update_update".getBytes());
 		Thread.sleep(1000);
-		
+
 		//4.删除节点
 		client.delete().deletingChildrenIfNeeded().forPath(path);
 	}
@@ -96,7 +96,7 @@ node data changed, new data:eagle_update
 node data changed, new data:eagle_update_update
 ```
 
-注: 
+注:
 	1. NodeCache.start(boolean buildInitial)方法中buildInitial参数默认为false,如果设置为true,那么NodeCache在第一次启动时就立刻从zookeeper上读取对应节点的数据内容,并保存在Cache中.
 	2. NodeCache不仅可以用于监听节点的内容变更,也能监听指定节点是否存在.如果原本节点不存在,那么Cache就会在节点被创建后触发NodeCacheListener.但,如果该数据节点被删除,那么Curator就无法触发该事件.
 
@@ -104,7 +104,7 @@ node data changed, new data:eagle_update_update
 
 ```java
 public class Main {
-	
+
 	/**
 	 * 初始sleep时间(毫秒)
 	 */
@@ -117,12 +117,12 @@ public class Main {
 	 * 最大sleep时间
 	 */
 	private static final int MAX_SLEEP_TIME = 60000;
-	
+
 	private static final String CONNECT_STRING = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
 	private static final int SESSION_TIMEOUT = 5000;
 	private static final int CONNECTION_TIMEOUT = 5000;
-	
-	
+
+
 	public static void main(String[] args) throws Exception {
 		CuratorFramework client = initClient();
 		watchChildrenChanged(client);
@@ -135,7 +135,7 @@ public class Main {
 	private static CuratorFramework initClient() {
 		//1.设置重试策略,重试时间计算策略sleepMs = baseSleepTimeMs * Math.max(1, random.nextInt(1 << (retryCount + 1)));
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(BASE_SLEEP_TIME, MAX_RETRIES_COUNT, MAX_SLEEP_TIME);
-		
+
 		//2.使用Fluent风格初始化客户端
 		CuratorFramework client = CuratorFrameworkFactory.builder()
 														 .connectString(CONNECT_STRING)
@@ -147,17 +147,17 @@ public class Main {
 		client.start();
 		return client;
 	}
-	
+
 	private static void watchChildrenChanged(CuratorFramework client) throws Exception{
 		//1.创建目标监听节点
 		String path = client.create().creatingParentsIfNeeded().forPath("/node1", "eagle".getBytes());
 		System.out.println("success create path:" + path);
-		
+
 		//2.添加监听器
 		PathChildrenCache cache = new PathChildrenCache(client, path, true);
 		cache.start(StartMode.BUILD_INITIAL_CACHE);
 		cache.getListenable().addListener(new PathChildrenCacheListener() {
-			
+
 			@Override
 			public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
 				switch(event.getType()){
@@ -176,31 +176,31 @@ public class Main {
 				}
 			}
 		});
-		
+
 		//3.创建子节点
 		String result = client.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(path + "/c1");
 		System.out.println("success create path:" + result);
-		
+
 		Thread.sleep(2000);
-		
+
 		//4.创建二级子节点
 		String result2 = client.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(result + "/c2");
 		System.out.println("success create path:" + result2);
-		
+
 		Thread.sleep(2000);
-		
+
 		//5.删除子节点
 		client.delete().deletingChildrenIfNeeded().forPath(result);
 		System.out.println("success delete path:" + result);
-		
+
 		Thread.sleep(2000);
-		
+
 		//6.删除节点
 		client.delete().forPath(path);
 		System.out.println("success delete path:" + path);
-		
+
 		Thread.sleep(2000);
-		
+
 		cache.close();
 	}
 }
@@ -231,28 +231,28 @@ public class MasterSelectedDemo {
 	private static final int BASE_SLEEP_TIME = 1000;
 	private static final int MAX_RETRIES_COUNT = 5;
 	private static final int MAX_SLEEP_TIME = 60000;
-	
+
 	private static final String CONNECT_STRING = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
 	private static final int SESSION_TIMEOUT = 5000;
 	private static final int CONNECTION_TIMEOUT = 5000;
-	
+
 	private static final String MASTER_PATH = "/master_lock";
-	
+
 	public static void main(String[] args) throws Exception {
-		
+
 		final CuratorFramework client = initClient();
-		
+
 		ExecutorService executorService = Executors.newFixedThreadPool(10);
-		
+
 		for(int i = 0; i < 8; i++){
 			executorService.execute(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					while(true) {
-						
+
 						LeaderSelector leaderSelector = new LeaderSelector(client, MASTER_PATH, new LeaderSelectorListenerAdapter() {
-							
+
 							/**
 							 * Curator会在该线程被成功选取为master时回调该方法.同时,当该方法执行完毕之后,Curator会自动释放master权利,然后重新开始新一轮的选举
 							 */
@@ -262,34 +262,34 @@ public class MasterSelectedDemo {
 								try{
 									Thread.sleep(3000);
 								}catch(Throwable e){
-									
+
 								}
 								System.out.println("Thread:" + Thread.currentThread().getName() + " release master right!");
 							}
 						});
-						
-						//By default, when LeaderSelectorListener.takeLeadership(CuratorFramework) returns, this instance is not requeued. 
+
+						//By default, when LeaderSelectorListener.takeLeadership(CuratorFramework) returns, this instance is not requeued.
 						//Calling this method puts the leader selector into a mode where it will always requeue itself.
 						leaderSelector.autoRequeue();
-						
+
 						//Attempt leadership. This attempt is done in the background - i.e. this method returns immediately.
 						leaderSelector.start();
-						
+
 						try {
 							Thread.sleep(3000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						
+
 						//Shutdown this selector and remove yourself from the leadership group
 						leaderSelector.close();
 					}
 				};
 			});
 		}
-		
+
 		executorService.shutdown();
-		
+
 		Thread.sleep(30000);
 	}
 
@@ -300,7 +300,7 @@ public class MasterSelectedDemo {
 	private static CuratorFramework initClient() {
 		//1.设置重试策略,重试时间计算策略sleepMs = baseSleepTimeMs * Math.max(1, random.nextInt(1 << (retryCount + 1)));
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(BASE_SLEEP_TIME, MAX_RETRIES_COUNT, MAX_SLEEP_TIME);
-		
+
 		//2.使用Fluent风格初始化客户端
 		CuratorFramework client = CuratorFrameworkFactory.builder()
 									.connectString(CONNECT_STRING)
@@ -347,23 +347,23 @@ public class CuratorLock {
 	private static final int BASE_SLEEP_TIME = 1000;
 	private static final int MAX_RETRIES_COUNT = 5;
 	private static final int MAX_SLEEP_TIME = 60000;
-	
+
 	private static final String CONNECT_STRING = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
 	private static final int SESSION_TIMEOUT = 5000;
 	private static final int CONNECTION_TIMEOUT = 5000;
-	
+
 	private static final String MASTER_PATH = "/master_lock";
-	
+
 	public static void main(String[] args) {
-		
+
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		CuratorFramework client = initClient();
-		
+
 		final InterProcessLock lock = new InterProcessMutex(client, MASTER_PATH);
-		
+
 		for(int i = 0; i < 10; i++){
 			new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					try {
@@ -374,11 +374,11 @@ public class CuratorLock {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 					SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss|SSS");
 					String date = format.format(new Date());
 					System.out.println("generate number:" + date);
-					
+
 					try {
 						lock.release();
 					} catch (Exception e) {
@@ -387,11 +387,11 @@ public class CuratorLock {
 				}
 			}).start();
 		}
-		
+
 		countDownLatch.countDown();
 	}
-	
-	
+
+
 	/**
 	 * 初始化客户端
 	 * @return
@@ -399,7 +399,7 @@ public class CuratorLock {
 	private static CuratorFramework initClient() {
 		//1.设置重试策略,重试时间计算策略sleepMs = baseSleepTimeMs * Math.max(1, random.nextInt(1 << (retryCount + 1)));
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(BASE_SLEEP_TIME, MAX_RETRIES_COUNT, MAX_SLEEP_TIME);
-		
+
 		//2.使用Fluent风格初始化客户端
 		CuratorFramework client = CuratorFrameworkFactory.builder()
 									.connectString(CONNECT_STRING)
@@ -440,29 +440,29 @@ public class CuratorLock {
 	private static final int BASE_SLEEP_TIME = 1000;
 	private static final int MAX_RETRIES_COUNT = 5;
 	private static final int MAX_SLEEP_TIME = 60000;
-	
+
 	private static final String CONNECT_STRING = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
 	private static final int SESSION_TIMEOUT = 5000;
 	private static final int CONNECTION_TIMEOUT = 5000;
-	
+
 	private static final String MASTER_PATH = "/master_lock";
-	
+
 	private static  DistributedBarrier barrier;
-	
+
 	public static void main(String[] args) throws Exception {
-		
+
 		distributedBarrier2();
 	}
-	
+
 	private static void distributedBarrier2(){
 		for(int i = 0; i < 10; i++){
 			new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					//1.设置重试策略,重试时间计算策略sleepMs = baseSleepTimeMs * Math.max(1, random.nextInt(1 << (retryCount + 1)));
 					RetryPolicy retryPolicy = new ExponentialBackoffRetry(BASE_SLEEP_TIME, MAX_RETRIES_COUNT, MAX_SLEEP_TIME);
-					
+
 					//2.使用Fluent风格初始化客户端
 					CuratorFramework client = CuratorFrameworkFactory.builder()
 											.connectString(CONNECT_STRING)
@@ -472,7 +472,7 @@ public class CuratorLock {
 											.namespace("simple")		//命名空间隔离
 											.build();
 					client.start();
-					
+
 					//可以指定成员个数
 					DistributedDoubleBarrier doubleBarrier = new DistributedDoubleBarrier(client, MASTER_PATH, 10);
 					try {
@@ -482,7 +482,7 @@ public class CuratorLock {
 						e1.printStackTrace();
 					}
 					System.out.println(Thread.currentThread().getName() + ": ready!");
-					
+
 					try {
 						doubleBarrier.enter();
 						System.out.println(Thread.currentThread().getName() + ": run!");
@@ -496,17 +496,17 @@ public class CuratorLock {
 			}).start();
 		}
 	}
-	
+
 	private static void distributedBarrier() throws Exception{
-		
+
 		for(int i = 0; i < 10; i++){
 			new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					//1.设置重试策略,重试时间计算策略sleepMs = baseSleepTimeMs * Math.max(1, random.nextInt(1 << (retryCount + 1)));
 					RetryPolicy retryPolicy = new ExponentialBackoffRetry(BASE_SLEEP_TIME, MAX_RETRIES_COUNT, MAX_SLEEP_TIME);
-					
+
 					//2.使用Fluent风格初始化客户端
 					CuratorFramework client = CuratorFrameworkFactory.builder()
 											.connectString(CONNECT_STRING)
@@ -518,7 +518,7 @@ public class CuratorLock {
 					client.start();
 
 				       barrier = new DistributedBarrier(client, MASTER_PATH);
-					
+
 					System.out.println(Thread.currentThread().getName() + ": ready!");
 					try {
 						barrier.setBarrier();
@@ -528,10 +528,10 @@ public class CuratorLock {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 				}
 			}).start();
-			
+
 		}
 		Thread.sleep(3000);
 		barrier.removeBarrier();
@@ -539,7 +539,7 @@ public class CuratorLock {
 }
 ```
 
---- 
+---
 
-参考:	
+参考:
 * [从Paxos到Zookeeper：分布式一致性原理与实践](http://www.broadview.com.cn/#book/bookdetail/bookDetailAll.jsp?book_id=12ccd70f-a944-11e4-9c0a-005056c00008&isbn=978-7-121-24967-9)

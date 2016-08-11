@@ -1,4 +1,4 @@
-title: <<深入Java虚拟机>>之垃圾收集算法
+title: garbage collection algorithm
 date: 2014-06-05 15:39:34
 categories: JVM
 toc: true
@@ -34,13 +34,13 @@ Java程序运行分配的实例对象几乎都分配在Java堆中。Java堆也�
 			public static void main(String[] args){
 				ReferenceCounting obj1 = new ReferenceCounting();
 				ReferenceCounting obj2 = new ReferenceCounting();
-				
+
 				obj1.obj = obj2;
 				obj2.obj = obj1;
-			
+
 				obj1 = null;
 				obj2 = null;
-				
+
 				System.gc();
 			}
 		}
@@ -115,7 +115,3 @@ JDK1.2之后，Java将引用分为*强引用(Stong Reference)*、*软引用(Soft
 ---
 
 参考 [深入Java虚拟机](http://item.jd.com/11252778.html)/chapter03 垃圾收集器与内存分配策略
-
-
-
-

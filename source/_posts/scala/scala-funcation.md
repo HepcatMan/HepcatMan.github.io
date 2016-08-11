@@ -1,4 +1,4 @@
-title: 控制结构以及函数
+title: funcation
 date: 2015-04-24 11:04:07
 categories: Scala
 toc: true
@@ -26,7 +26,7 @@ r: Any = 0
 ```bash
 # 如果没有else部分,相当于 var z = if (x > 2) ">0" else ()
 # "()"代表`没有值`的占位符,或者Unit类型(相当于java中的void)
-scala> var z = if (x > 2) ">0" 
+scala> var z = if (x > 2) ">0"
 z: Any = ()
 
 ```
@@ -49,7 +49,7 @@ sum2: Unit = ()
 ```
 
 ## 循环 ##
-### while ### 
+### while ###
 Scala中的while和do循环和java类似，示例:
 
 ```bash
@@ -60,7 +60,7 @@ while(n > 0){
      println(n)
 }
 ```
-### for ### 
+### for ###
 scala中没有类似java中的`for(int i = 0; i < b; i++){}`循环结构，在scala中常使用如下for循环:
 
 ```bash
@@ -77,7 +77,7 @@ for(i <- 1 to n){
 
 ```bash
 object cycle{
-  
+
   def main(args: Array[String]): Unit = {
        var str = "jassassin"
        println(str + "length:" + str.length())
@@ -90,7 +90,7 @@ object cycle{
          print(char + " ")
        }
   }
-  
+
 }
 ----------------------------输出--------------------------------
 //注意index值从0->8并未到9
@@ -105,7 +105,7 @@ s --- 6
 i --- 7
 n --- 8  
 ----------------------
-j a s s a s s i n 
+j a s s a s s i n
 
 ```
 
@@ -118,7 +118,7 @@ for(i <- 1 to 3; j <- 1 until 3; k <- 1 to 3){
    print(i * 100 + j * 10 + k + " ")
 }
 ----------------------------输出--------------------------------
-111 112 113 121 122 123 211 212 213 221 222 223 311 312 313 321 322 323 
+111 112 113 121 122 123 211 212 213 221 222 223 311 312 313 321 322 323
 ```
 
 `变量 <- 表达式`可以同时携带一个if开头的Boolean表达式:
@@ -132,7 +132,7 @@ for(i <- 1 to 3; j <- 1 until 3; k <- 1 to 3 if k != i){
 112 113 122 123 211 213 221 223 311 312 321 322
 ```
 
-### for推导式 ### 
+### for推导式 ###
 如果for循环的循环体以`yield`开头，则该循环会构造一个集合,每次迭代会生成该集合中的一个值:
 
 ```bash
@@ -142,8 +142,8 @@ scala> for(i <- 0 to 10) yield {i+1}
 res2: scala.collection.immutable.IndexedSeq[Int] = Vector(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
 ```
 
-## 函数 ## 
-### 函数定义 ### 
+## 函数 ##
+### 函数定义 ###
 scala中的函数以`def`开头,示例:
 
 ```bash
@@ -282,6 +282,5 @@ scala> print(result)
 ```
 ## 惰性初始化 ##
 当val类型的变量被`lazy`修饰时，那么该变量的初始化将被延迟至它第一次被访问。该特性常用于初始化开销比较大的应用，如文件读取!
-## 异常 ## 
-Scala中的异常和java中的基本一致，不同的是scala中没有"检查"型异常。因此scala中的方法签名中不会显示的标识`someMethod() throws IOException,XXException ...` 
-
+## 异常 ##
+Scala中的异常和java中的基本一致，不同的是scala中没有"检查"型异常。因此scala中的方法签名中不会显示的标识`someMethod() throws IOException,XXException ...`

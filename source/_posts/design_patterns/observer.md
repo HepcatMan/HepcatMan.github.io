@@ -1,9 +1,9 @@
-title: 观察者模式
+title: observer
 date: 2015-11-19 14:02:44
 categories: Design_Patterns
 toc: true
 ---
-## 概述 ## 
+## 概述 ##
 
 >	观察者模式是对象的行为模式，又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、源-监听器(Source/Listener)模式或从属者(Dependents)模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态上发生变化时，会通知所有观察者对象，使它们能够自动更新自己。		--- 阎宏《JAVA与模式》
 
@@ -19,7 +19,7 @@ public interface IObserver {
 
 	//当通知到来时观察者的更新动作
 	public void update(float temp);
-	
+
 	/**
 	 * 观察者名称
 	 * @return
@@ -32,11 +32,11 @@ public interface IObserver {
 public class ConcreteObserver implements IObserver {
 
 	private String name;
-	
+
 	public ConcreteObserver(String name){
 		this.name = name;
 	}
-	
+
 	@Override
 	public void update(float temp) {
 		System.out.println(this.name + " --- receive subject state change:" + temp);
@@ -55,11 +55,11 @@ public class ConcreteObserver implements IObserver {
 public interface ISubject {
 
 	public void registerObserver(IObserver observer);
-	
+
 	public void removeObserver(IObserver observer);
-	
+
 	public void notifyObsevers();
-	
+
 	public void changeState(float temp);
 }
 ```
@@ -69,11 +69,11 @@ public class ConcreteSubject implements ISubject {
 
 	private List<IObserver> observers;
 	private float temp;
-	
+
 	public ConcreteSubject(){
 		this.observers = new ArrayList<IObserver>();
 	}
-	
+
 	@Override
 	public void registerObserver(IObserver observer) {
 		this.observers.add(observer);
@@ -92,7 +92,7 @@ public class ConcreteSubject implements ISubject {
 			observer.update(this.temp);
 		}
 	}
-	
+
 	@Override
 	public void changeState(float temp){
 		this.temp = temp;
@@ -106,26 +106,26 @@ public class ConcreteSubject implements ISubject {
 public class Main {
 
 	public static void main(String[] args) {
-		
+
 		//1.创建观察主题
 		ISubject subject = new ConcreteSubject();
-		
+
 		//2.创建观察者
 		IObserver observer1 = new ConcreteObserver("observer-1");
 		IObserver observer2 = new ConcreteObserver("observer-2");
 		IObserver observer3 = new ConcreteObserver("observer-3");
-		
+
 		//3.注册观察者
 		subject.registerObserver(observer1);
 		subject.registerObserver(observer2);
 		subject.registerObserver(observer3);
-		
+
 		Random seed = new Random(100);
 		for(int i = 0; i < 5; i++){
 			System.out.println("-------------");
 			subject.changeState(seed.nextFloat());
 		}
-		
+
 		subject.removeObserver(observer1);
 		subject.removeObserver(observer2);
 		subject.removeObserver(observer3);
@@ -147,9 +147,9 @@ public class Main {
 消息模型SimpleEvent:
 ```java
 public class SimpleEvent {
-	
+
 	private String message;
-	
+
 	public SimpleEvent(String message){
 		this.message = message;
 	}
@@ -157,19 +157,19 @@ public class SimpleEvent {
 	public String getMessage() {
 		return message;
 	}
-	
+
 }
 ```
 
 观察者SimpleEventListener:
 ```java
 public class SimpleEventListener {
-	
+
 	@Subscribe
 	public void listen(SimpleEvent event){
 		System.out.println("simple listener listen:" + event.getMessage());
 	}
-	
+
 	@Subscribe
 	public void listen(Number numberEvent){
 		System.out.println("simple listener listen:" + numberEvent.toString());
@@ -183,10 +183,10 @@ public class SimpleEventBusTest {
 
 	public static void main(String[] args) {
 		EventBus bus = new EventBus();
-		
+
 		SimpleEventListener listener = new SimpleEventListener();
 		bus.register(listener);
-		
+
 		bus.post(new SimpleEvent("hello"));
 		bus.post(new SimpleEvent("world"));
 		bus.post(new SimpleEvent("!"));
@@ -195,7 +195,7 @@ public class SimpleEventBusTest {
 }
 ```
 
---- 
+---
 
-参考:	
+参考:
 * [Guava学习笔记：EventBus](http://www.cnblogs.com/peida/p/EventBus.html)
